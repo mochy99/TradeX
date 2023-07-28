@@ -1,0 +1,291 @@
+:root {
+    --height-header:10vh;
+    --border-radius: 5%;
+    --gap-default: 10px;
+    --background-color-purple: rgb(37,18,71);
+    --background-color-blue: rgb(24,32,46);
+    --button-color-1:  rgb(220,79,248);
+    --button-color-2: rgb(70,195,249);
+    --time-options-color: rgba(64, 94, 140, 0.7);
+    --container-color-1: rgba(45, 85, 139, 0.5);
+    --container-color-2: rgba(45, 9, 98, 0.3);
+}
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;   
+    color: white;
+}
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-image: linear-gradient(90deg, var(--background-color-purple), var(--background-color-blue));
+}
+
+.header {
+    width: 95vw;
+    height: var(--height-header);
+    position:fixed;
+    top: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: linear-gradient(90deg, var(--background-color-purple), var(--background-color-blue));
+    z-index: 2;
+}
+
+.right-top-nav {
+    position: absolute;
+    height: var(--height-header);
+    top: 0px;
+    right: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+.left-top-nav {
+    position: absolute;
+    height: var(--height-header);
+    top: 0px;
+    left: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: calc(var(--height-header) /4)
+}
+.main{
+    margin-top: var(--height-header);
+    margin-bottom: var(--height-header);
+    width: 95vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: var(--gap-default);
+}
+.search {
+    position: relative;
+}
+#search {
+    background-color: rgba(255, 255, 255, 0.9);
+    width: 90vw;
+    height: 5vh;
+    border-radius: 100px;
+    color: black;
+    padding-left: 35px;
+    font-size: 1em;
+}
+#icon-search {
+    position: absolute;
+    left: var(--gap-default);
+    top: 2.5vh;
+    color: black;
+    transform: translateY(-50%);
+}
+input::placeholder {
+    font-style: italic;
+}
+
+.close {
+    width: 90vw;
+    text-align: right;
+}
+button {
+    padding-left: var(--gap-default);
+    padding-right: var(--gap-default);
+    height:30px;
+    border: none;
+    border-radius: 20px;
+    box-shadow: none;
+    background-image: linear-gradient(135deg, var(--button-color-1), var(--button-color-2));
+}
+.selectors {
+    height: max-content;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: stretch;
+    align-items: center;
+    gap: 5px;
+    padding-top: var(--gap-default);
+}
+button.time {
+    width: 8vh;
+    height: 4vh;
+    border: none;
+    border-radius: 6px;
+    box-shadow: none;
+    background-image: linear-gradient(135deg, var(--time-options-color), var(--time-options-color));
+}
+
+.container {
+    background-image:linear-gradient(175deg, var(--container-color-1), var(--container-color-2));
+    width: 90vw;
+    height: max-content;
+    border-radius: var(--gap-default);
+    padding: var(--gap-default);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    margin-top: var(--gap-default);
+}
+.box {
+    display: flex; 
+    scroll-snap-type: x mandatory; 
+    overflow-x: scroll;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory; 
+    scroll-behavior: smooth; 
+}
+.box::-webkit-scrollbar {
+    width: 0;
+}
+
+.box::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+.box::-webkit-scrollbar-thumb {
+    background-color: transparent;
+}
+
+.item {
+    min-width: 60vw;
+    height: 40vh;
+    margin-left: var(--gap-default);
+    margin-top: var(--gap-default);
+    margin-bottom: var(--gap-default);
+    background-color:rgba(255, 255, 255, 0.10);
+    border-radius: 15px;
+    padding: var(--gap-default);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.item >div:first-child {
+    width: 5vh;
+    height: 5vh;
+    padding-left: var(--gap-default);
+}
+.item >div:nth-child(2) {
+    height: 22vh;
+    padding-left: var(--gap-default);
+    padding-right: var(--gap-default);
+}
+.item > div:last-child {
+    height: 7vh;
+    padding-left: var(--gap-default);
+    padding-right: var(--gap-default);
+    display: flex;
+    flex-direction: column;
+}
+.inf {
+    margin-bottom: 5px;
+}
+.inf > div:first-child {
+    padding-top: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+.inf > div:last-child {
+    display: flex;
+    justify-content: space-between;
+}
+.inf > div:last-child > div:first-child {
+    padding-top: 1vh;
+}
+p {
+    justify-self: end;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    font-style: italic;
+}
+.pos {
+    color: var(--button-color-1);
+    font-style: italic;
+}
+.neg {
+    color: var(--button-color-2);
+    font-style: italic;
+}
+
+.nav{
+    height: 7vh;
+    width: 100vw;
+    position: fixed;
+    bottom: 0px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-image: linear-gradient(90deg, var(--background-color-purple), var(--background-color-blue));
+}
+.profile, .trend, .setting {
+    width: 25vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-left: 10vw;
+}
+
+.inactive {
+    color: rgba(255, 255, 255, 0.24);
+}
+.visible {
+    visibility: visible;
+}
+
+.hidden {
+    display: none;
+}
+
+@media only screen and (min-width: 413px) and (max-width:1336px) {
+    /* For tablet and laptop*/
+    .box {
+        display: flex; 
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+    }
+
+    .item {
+        min-width: 40vw;
+        height: 35vh;
+    }
+    .item >div:first-child {
+        width: 3.5vh;
+        height: 3.5vh;
+    }
+    .item >div:nth-child(2) {
+        height: 18vh;
+    }
+    .item > div:last-child {
+        height: 7vh;
+    }
+}
+@media only screen and (min-width: 1337px) {
+    /* For tablet and laptop*/
+    .box {
+        display: flex; 
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .item {
+        min-width: 20vw;
+        height: 30vh;
+    }
+
+    .item >div:first-child {
+        width: 3.5vh;
+        height: 3.5vh;
+    }
+    .item >div:nth-child(2) {
+        height: 18vh;
+    }
+    .item > div:last-child {
+        height: 7vh;
+    }
+
+}
