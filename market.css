@@ -168,6 +168,10 @@ button.time {
     width: 5vh;
     height: 5vh;
     padding-left: var(--gap-default);
+    background-image: url(image/Logo-Tesla.jpg);
+    background-size: cover;
+    background-position: center;
+    border-radius: 50%;
 }
 .item >div:nth-child(2) {
     height: 22vh;
