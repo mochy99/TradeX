@@ -1,0 +1,181 @@
+:root {
+    --height-header:10vh;
+    --border-radius: 5%;
+    --gap-default: 20px;
+    --background-color-purple: rgb(37,18,71);
+    --background-color-blue: rgb(24,32,46);
+    --button-color-1:  rgb(220,79,248);
+    --button-color-2: rgb(70,195,249);
+    --time-options-color: rgba(64, 94, 140, 0.7);
+    --container-color-1: rgba(45, 85, 139, 0.5);
+    --container-color-2: rgba(45, 9, 98, 0.3);
+}
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;   
+    color: white;
+}
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-image: linear-gradient(90deg, var(--background-color-purple), var(--background-color-blue));
+}
+
+.header {
+    width: 95vw;
+    height: var(--height-header);
+    position:fixed;
+    top: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: linear-gradient(90deg, var(--background-color-purple), var(--background-color-blue));
+    z-index: 2;
+}
+
+.right-top-nav {
+    position: absolute;
+    height: var(--height-header);
+    top: 0px;
+    right: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+.left-top-nav {
+    position: absolute;
+    height: var(--height-header);
+    top: 0px;
+    left: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: calc(var(--height-header) /4)
+}
+.main{
+    margin-top: var(--height-header);
+    margin-bottom: var(--height-header);
+    width: 95vw;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: var(--gap-default);
+}
+.summary {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--gap-default);
+}
+.figure {
+    width: inherit;
+
+}
+.graphic {
+    width: inherit;
+}
+
+.graph {
+    height: 40vh;
+    width: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: var(--border-radius);
+    background-image:linear-gradient(175deg, var(--container-color-1), var(--container-color-2));
+}
+button {
+    width: 90vw;
+    height: 6vh;
+    border: none;
+    border-radius: 100px;
+    box-shadow: none;
+    background-image: linear-gradient(135deg, var(--button-color-1), var(--button-color-2));
+}
+.selectors {
+    width: inherit;
+    height: 7vh;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+}
+button.time {
+    width: 8vh;
+    height: 4vh;
+    border: none;
+    border-radius: 6px;
+    box-shadow: none;
+    background-image: linear-gradient(135deg, var(--time-options-color), var(--time-options-color));
+}
+
+
+
+.myaccount {
+    width: 90vw;
+    display: flex;
+    flex-direction: column;
+}
+.container {
+    background-image:linear-gradient(175deg, var(--container-color-1), var(--container-color-2));
+    height: max-content;
+    border-radius: var(--gap-default);
+    padding: var(--gap-default);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    margin-top: var(--gap-default);
+    gap: 10px;
+}
+.ratio {
+    width: 35vw;
+    display: flex;
+    justify-content: space-between;
+}
+.ratio > span {
+    font-size: 0.75em;
+}
+.ratio >span:first-child {
+    font-weight: bold;
+}
+.pos {
+    color: var(--button-color-1);
+}
+.neg {
+    color: var(--button-color-2);
+}
+
+
+
+@media only screen and (min-width: 413px) {
+    /* For tablet and laptop*/
+    .main {
+        justify-content: center;
+    }
+    .summary, .myaccount {
+        width: 40vw;
+        height: 80vh;
+    }
+    .selectors, .add {
+        width: 40vw;
+    }
+    .graph {
+        height: 45vh
+    }
+    .nav {
+        width: 90vw;
+    }
+    .add {
+        height: 25px;
+        width: 25vw;
+    }
+
+    .ratio {
+        width: 15vw;
+    }
+}
