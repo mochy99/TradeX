@@ -9,5 +9,5 @@ logInBtn.addEventListener("click", function() {
     window.location.href = "login.php";
   });
 homepage.addEventListener("click", () => {
-    window.location.href = "homepage.html"
+    window.location.href = "homepage.php"
 })

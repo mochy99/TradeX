@@ -7,7 +7,7 @@ let continueBtn = document.querySelector(".button");
 const regExpEmail = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
 homepage.addEventListener("click", () => {
-  window.location.href = "homepage.html"
+  window.location.href = "homepage.php"
 })
 
 email.addEventListener("input", () => {

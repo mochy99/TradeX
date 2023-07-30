@@ -23,7 +23,7 @@ const regExpDigit = /[0-9]/g;
 const regExpSpecial =/[^a-zA-Z ]+/g;
 
 homepage.addEventListener("click", () => {
-    window.location.href = "homepage.html"
+    window.location.href = "homepage.php"
 })
 firstPassWord.addEventListener("keyup", (eve) => {
     let value = firstPassWord.value;

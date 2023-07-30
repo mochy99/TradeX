@@ -21,7 +21,7 @@ const regExpDigit = /[0-9]/g;
 const regExpSpecial =/[^a-zA-Z ]+/g;
 
 homepage.addEventListener("click", () => {
-    window.location.href = "homepage.html"
+    window.location.href = "homepage.php"
 })
 email.addEventListener("keyup", () => {
     let value = email.value.trim();
