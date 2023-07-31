@@ -32,6 +32,7 @@ function validateLogin() {
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
         if ($password === $row["password"]) {
+            $_SESSION["email"]= $email;
             header("Location: mainPage.php");
             exit;
         } else {
