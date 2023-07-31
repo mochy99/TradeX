@@ -1,0 +1,128 @@
+:root {
+    --height-header:10vh;
+    --border-radius: 5%;
+    --gap-default: 10px;
+    --background-color-purple: rgb(37,18,71);
+    --background-color-blue: rgb(24,32,46);
+    --button-color-1: rgba(189, 207, 220, 0.7);
+    --button-color-2: rgb(8,2,16, 0.5);
+    --time-options-color: rgba(64, 94, 140, 0.7);
+    --container-color-1: rgba(45, 85, 139, 0.5);
+    --container-color-2: rgba(45, 9, 98, 0.3);
+    --dark-color: rgb(8,2,16, 0.9);
+    --dark-color-2: rgb(8,2,16, 0.7);
+}
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;   
+    color: white;
+}
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-image: linear-gradient(90deg, var(--background-color-purple), var(--background-color-blue));
+}
+
+.header {
+    width: 95vw;
+    height: var(--height-header);
+    position:fixed;
+    top: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: linear-gradient(90deg, var(--background-color-purple), var(--background-color-blue));
+    z-index: 2;
+}
+
+
+.main {
+    margin-top: var(--height-header);
+    margin-bottom: var(--height-header);
+    width: 95vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: var(--gap-default);
+}
+
+.description {
+    text-align: center;
+}
+
+.container {
+    background-image:linear-gradient(175deg, var(--container-color-1), var(--container-color-2));
+    width: 90vw;
+    height: 10vh;
+    height: max-content;
+    border-radius: var(--gap-default);
+    padding: var(--gap-default);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: calc(2 * var(--gap-default));
+
+}
+
+
+h2 {
+    font-size: 1.3em;
+    display: flex;
+    gap: 1vw;
+}
+
+button {
+    width: 90vw;
+    background-color: var(--button-color-1);
+    color: white;
+    border: none;
+    height: 7vh;
+    border-radius: 100px;
+    margin-top: calc(2 * var(--gap-default));
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.nav{
+    height: 7vh;
+    width: 100vw;
+    position: fixed;
+    bottom: 0px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-image: linear-gradient(90deg, var(--background-color-purple), var(--background-color-blue));
+}
+.profile, .trend, .setting {
+    width: 25vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-left: 10vw;
+}
+
+.inactive {
+    color: rgba(255, 255, 255, 0.24);
+}
+
+
+
+@media only screen and (min-width: 413px) and (max-width:1336px) {
+    /* For tablet and laptop*/
+    .container, button {
+        width: 75vh;
+        height: 8vh;
+    }
+}
+@media only screen and (min-width: 1337px) {
+    /* For tablet and laptop*/
+    .container, button {
+        width: 65vh;
+        height: 8vh;
+    }
+
+}
