@@ -35,8 +35,7 @@ session_start();
             <span class="lowercase">Must contain at least 1 lowercase</span>
             <span class="digit">Must contain at least 1 number</span>
             <span class="special">Must contain at least 1 special character ~`!@#$%^&*()-_+={}[]|\;:"<>,./?</span>
-            <input type="submit" value="Continue" class="button">
-    
+            <input type="submit" value="Continue" class="button"> 
         </form>
     </div>
     

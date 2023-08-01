@@ -20,7 +20,7 @@ let isValidated = false;
 const regExpUpper = /[A-Z]/g;
 const regExpLower = /[a-z]/g;
 const regExpDigit = /[0-9]/g;
-const regExpSpecial =/[^a-zA-Z ]+/g;
+const regExpSpecial =/[^a-zA-Z0-9 ]+/g;
 
 homepage.addEventListener("click", () => {
     window.location.href = "homepage.php"
@@ -34,18 +34,15 @@ firstPassWord.addEventListener("keyup", (eve) => {
        }
     }
 
-    if (!isUpperCase) {
         isUpperCase = included(value,regExpUpper,upperCase);
-    }
-    if (!isLowercase) {
+    
         isLowercase = included(value,regExpLower, lowerCase);
-    }
-    if (!isDigit) {
+
         isDigit = included(value,regExpDigit, digit);
-    }
-    if (!isSpecial) {
+
+
         isSpecial = included(value,regExpSpecial, special);
-    }   
+    
     
     validatePassword();
     if (isValidated) {
@@ -57,8 +54,11 @@ firstPassWord.addEventListener("keyup", (eve) => {
 
 function included(str, regExp, target) {
     if (str.match(regExp)) {
-        target.className = "contained"
+        target.className = "contained";
         return true;
+    } else {
+        target.className = "not-contained";
+        return false;
     }
 
 }

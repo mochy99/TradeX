@@ -77,10 +77,9 @@ input {
     border: none;
     padding-left: 5px;
 }
-input:focus:active {
-    background-color: transparent;
+input:focus {
     border: none;
-    outline: none;
+    outline-style: none;
 }
 
 input::placeholder {
@@ -113,6 +112,9 @@ span {
 .error {
     color: var(--error-color);
     margin-bottom: calc(var(--gap-default / 3));
+}
+.not-contained {
+    color: var(--button-color-1);
 }
 .contained {
     color: var(--dark-color-2);
