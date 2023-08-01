@@ -1,3 +1,14 @@
+<?php
+// error reporting
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+session_start();
+if (!isset($_SESSION["email"])) {
+    header("Location: login.php");
+     exit;
+} 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,7 +22,9 @@
 <body>
     <section class="header">
         <h1>Profile</h1>
-        <div class="right-top-nav">TradeX</div>
+        <div class="right-top-nav">
+            <?php echo $_SESSION["email"];?>
+        </div>
     </section>
     <section class="main">
         <section class="summary">
