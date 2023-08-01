@@ -18,7 +18,7 @@ const regExpEmail = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 const regExpUpper = /[A-Z]/g;
 const regExpLower = /[a-z]/g;
 const regExpDigit = /[0-9]/g;
-const regExpSpecial =/[^a-zA-Z ]+/g;
+const regExpSpecial =/[^a-zA-Z0-9 ]+/g;
 
 homepage.addEventListener("click", () => {
     window.location.href = "homepage.php"
