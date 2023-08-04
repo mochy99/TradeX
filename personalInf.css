@@ -30,22 +30,14 @@ body {
     position:fixed;
     top: 0px;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     background-image: linear-gradient(90deg, var(--background-color-purple), var(--background-color-blue));
     z-index: 2;
 }
 
-.left-top-nav {
-    position: absolute;
-    height: var(--height-header);
-    top: 0px;
-    left: 0px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding-top: calc(var(--height-header) /4)
-}
+
+
 .main{
     margin-top: var(--height-header);
     margin-bottom: var(--height-header);
@@ -60,7 +52,7 @@ body {
 button {
     background-image: linear-gradient(90deg, var(--button-color-1), var(--button-color-2));
     border: none;
-    width: 9vh;
+    width: 7vh;
     height: 5vh;
     border-radius: 10px;
 }
@@ -72,9 +64,10 @@ button {
     border-radius: var(--gap-default);
     padding: var(--gap-default);
     display: flex;
+    flex-wrap: nowrap;
     flex-direction: column;
-    justify-content: start;
-    align-items: start;
+    justify-content: center;
+    align-items: center;
     margin-top: calc(2 * var(--gap-default));
     gap: var(--gap-default);
 }
@@ -86,15 +79,15 @@ h2 {
 
 .box {
     background-color: rgba(255,255,255,0.12);
-    height: 10vh;
+    height: 12vh;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-around;
     padding-left: var(--gap-default);
     padding-right: var(--gap-default);
 }
-input {
+input, select {
     width: 80vw;
     height: 5vh;
     background-color: transparent;
@@ -103,64 +96,51 @@ input {
     border-image-slice: 1;
     border-radius: 10px;
 }
+select {
+    appearance: none;
+}
+select:after {
+    border: 1px red solid;
+    background-color: red;
+}
+select option {
+    border: 1px red solid;
+    background-color: red;
+}
 
-input:focus {
+input:focus, select:focus {
     outline-style: none;
 }
 
-.pos {
-    color: var(--button-color-1);
-}
 .neg {
+    color: var(--button-color-1);
+    font-style: italic;
+}
+.pos {
     color: var(--button-color-2);
+}
+.error {
+    margin-bottom: 5px;
 }
 
 
 @media only screen and (min-width: 413px) and (max-width:1336px) {
     /* For tablet and laptop*/
-    .box {
-        display: flex; 
-        flex-wrap: wrap;
-        justify-content: space-evenly;
+    .container {
+        width: 75vw;
+    }
+    input, select {
+        width: 68vw;
     }
 
-    .item {
-        min-width: 40vw;
-        height: 35vh;
-    }
-    .item >div:first-child {
-        width: 3.5vh;
-        height: 3.5vh;
-    }
-    .item >div:nth-child(2) {
-        height: 18vh;
-    }
-    .item > div:last-child {
-        height: 7vh;
-    }
 }
 @media only screen and (min-width: 1337px) {
     /* For tablet and laptop*/
-    .box {
-        display: flex; 
-        flex-wrap: wrap;
-        justify-content: space-between;
+    .container {
+        width: 50vw;
     }
-
-    .item {
-        min-width: 20vw;
-        height: 30vh;
-    }
-
-    .item >div:first-child {
-        width: 3.5vh;
-        height: 3.5vh;
-    }
-    .item >div:nth-child(2) {
-        height: 18vh;
-    }
-    .item > div:last-child {
-        height: 7vh;
+    input, select {
+        width: 45vw;
     }
 
 }

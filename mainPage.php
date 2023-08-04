@@ -15,6 +15,7 @@ if (!isset($_SESSION["email"])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
     <link rel="stylesheet" href="mainPage.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
     <title>Trade Now</title>
@@ -72,5 +73,6 @@ if (!isset($_SESSION["email"])) {
         <span class="trend material-symbols-outlined inactive">query_stats</span>
         <span class="setting material-symbols-outlined inactive">settings</span>
     </section>
+    <script src="mainPage.js"></script>
 </body>
 </html>

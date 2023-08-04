@@ -53,20 +53,6 @@ function isUsed() {
     $conn->close();
 }
 
-
-    // if ($email === "hello@world.com") {
-    //     // execute code for the registered email
-    //     $_SESSION["email"] = $email;
-    //     $_SESSION["registeredMsg"] = "*Your email is already registered!";
-    //     header("Location: signup.php");
-    //     exit;
-    // } else {
-    //     // execute code for a new email
-    //     $_SESSION["email"] = $email;
-    //     $_SESSION["registeredMsg"] = "";
-    //     header("Location: nextsignup.php");
-    //     exit;
-    // }
 isUsed();
 function test_input($data) {
     $data = trim($data);

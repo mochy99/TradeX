@@ -33,15 +33,13 @@ firstPassWord.addEventListener("keyup", (eve) => {
         isEnoughLength = true;
        }
     }
+    isUpperCase = included(value,regExpUpper,upperCase);
 
-        isUpperCase = included(value,regExpUpper,upperCase);
-    
-        isLowercase = included(value,regExpLower, lowerCase);
+    isLowercase = included(value,regExpLower, lowerCase);
 
-        isDigit = included(value,regExpDigit, digit);
+    isDigit = included(value,regExpDigit, digit);
 
-
-        isSpecial = included(value,regExpSpecial, special);
+    isSpecial = included(value,regExpSpecial, special);
     
     
     validatePassword();
