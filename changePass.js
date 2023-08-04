@@ -8,9 +8,9 @@ const upperCase = document.querySelector('.uppercase');
 const lowerCase = document.querySelector('.lowercase');
 const digit = document.querySelector('.digit');
 const special = document.querySelector('.special');
-const errorOld = document.querySelector('errorMsg-old');
-const errorNew = document.querySelector('errorMsg-new');
-const errorConfirm = document.querySelector('errorMsg-confirm');
+const errorOld = document.querySelector('.errorMsg-old');
+const errorNew = document.querySelector('.errorMsg-new');
+const errorConfirm = document.querySelector('.errorMsg-confirm');
 const submit = document.getElementById('submit');
 
 
@@ -75,29 +75,23 @@ $(document).ready(function() {
 
     // Event handler for new password blur: Validates input string against conditions.
    newPass.addEventListener('keyup', () => {
-    console.log(newPass.value);
+    errorNew.innerText = "";
     isValidated = validateCond(newPass.value);
-    
    })
     // Event handler for confirm password blur: Compares passwords, updates submit button color, and securely updates the database.
    confirmPass.addEventListener('keyup', () => {
+    errorConfirm.innerText = "";
     if (newPass.value === confirmPass.value 
         && isValidated
         && newPass.value !== old.value) {
         submit.className = 'not-pending';
-    } else if (newPass.value === old.value) {
-        confirmPass.innerText = "*Please select an alternate password from your current one."
-        submit.className = 'pending';
-    } else if (newPass.value !== confirmPass.value) {
-        confirmPass.innerText = "*Passwords do not match"
-        submit.className = 'pending';
-    } else {
-        submit.className = 'pending';
-    }
+    } 
    })
 
    // Update the new password into database when clicking submit btn
    $('#submit').click(function() {
+    errorNew.innerText = "";
+    errorConfirm.innerText = "";
     if (newPass.value === confirmPass.value && isValidated && newPass.value !== old.value) {
         $.ajax({
             url: 'updatePass.php',
@@ -111,6 +105,14 @@ $(document).ready(function() {
                  console.error(err);
              }
         })
+    } else if (newPass.value === old.value) {
+        errorNew.innerText = "*Please select a different one from the current password."
+        submit.className = 'pending';
+    } else if (newPass.value !== confirmPass.value) {
+        errorConfirm.innerText = "*Passwords do not match"
+        submit.className = 'pending';
+    } else {
+        submit.className = 'pending';
     }
     
 })
