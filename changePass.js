@@ -57,8 +57,12 @@ $(document).ready(function() {
                 console.log(response);
                 if (response.trim() === '1') {
                     $('.errorMsg-old').text("");
+                    $('#newPass').prop('disabled', false);
+                    $('#confirmPass').prop('disabled', false);
                 } else {
                     $('.errorMsg-old').text("*Incorrect password");
+                    $('#newPass').prop('disabled', true);
+                    $('#confirmPass').prop('disabled', true);
                 }
             },
             error: function(err) {
