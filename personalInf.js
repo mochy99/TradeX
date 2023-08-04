@@ -47,7 +47,6 @@ function isValid() {
         type: 'GET',
         data: { userName: userName.val() },
         success: function(response) {
-            console.log(response);
             if (response.trim() === '1') {
                 validate();
                 $('.errorMsg-userName').text('');
@@ -71,7 +70,6 @@ function validate() {
     let isValidatedDate = sanitizeDate(dob.val());
     if (isValidatedFistName &&isValidatedLastName 
         && isValidatedPhoneNum && isValidatedDate) {
-            console.log("zo");
         // handle html elements
         $('select').prop('disabled', true);
         $('input[type!="email"]').prop('disabled', true);
@@ -176,7 +174,6 @@ function fetchInf() {
         url: 'userInf.php',
         type: 'GET',
         success: function (data) {
-            console.log(data);
             const refArray = ['#userName', '#firstName', '#lastName', '#email', '#gender', '#phoneNumber', '#dob'];
             let dataArray = data.split(',');
             for (let i = 0; i < dataArray.length; i++) {
@@ -211,7 +208,6 @@ function postInf() {
         data: { inf: dataInf},
         success: function (reply) {
            $('h1').text(reply);
-           console.log(reply);
         },
         error: function (err) {
             console.error(err);

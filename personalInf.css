@@ -96,6 +96,9 @@ input, select {
     border-image-slice: 1;
     border-radius: 10px;
 }
+input[type='email'] {
+    color: rgba(255, 255, 255, 0.55)
+}
 select {
     appearance: none;
 }
