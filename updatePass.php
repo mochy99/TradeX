@@ -24,7 +24,7 @@ $updateStmt = $conn->prepare("UPDATE users SET password=? WHERE email=?");
 $updateStmt->bind_param("ss", $data, $email);
 $updateStmt->execute();
 
-echo $response = "Your password is changed!";
+echo $response = "Your password was changed!";
 
 $updateStmt->close();
 $conn->close();
