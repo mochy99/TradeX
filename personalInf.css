@@ -92,17 +92,18 @@ h2 {
     width: 85vw;
     display: flex;
     justify-content: start;
+    align-items: center;
 }
 input[type="checkbox"] {
     height: 2vh;
     width: 2vh;
 }
-label[for=show] {
+label[for=showOld], label[for=showNew] {
     font-size: 0.75em;
     color: rgba(255,255,255, 0.9);
     text-align: left;
     font-weight: bold;
-    margin-left: calc(var(--gap-default) / 3);
+    margin-left: calc(var(--gap-default) / 2);
 }
 
 span {
