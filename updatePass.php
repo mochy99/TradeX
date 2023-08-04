@@ -20,11 +20,11 @@ if ($conn->connect_error) {
 
 // Check if the user already exists in the database
 
-$updateStmt = $conn->prepare("UPDATE users SET userName=?, fname=?, lname=?, gender=?, phoneNum=?, dob=? WHERE email=?");
-$updateStmt->bind_param("sssssss", $data[0], $data[1], $data[2], $data[3], $data[4], $data[5], $email);
+$updateStmt = $conn->prepare("UPDATE users SET password=? WHERE email=?");
+$updateStmt->bind_param("ss", $data, $email);
 $updateStmt->execute();
 
-echo $response = "Your information is updated!";
+echo $response = "Your password is changed!";
 
 $updateStmt->close();
 $conn->close();

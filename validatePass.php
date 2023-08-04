@@ -6,20 +6,21 @@ ini_set('display_errors', 1);
 session_start();
 require 'config.php';
 ?>
-
 <?php
+$email = $_SESSION["email"];
+$password = $_POST["data"];
+// SQL query and database operations here
 // Create connection
-$userName = $_GET['userName'];
-$conn =  new mysqli(DBHOST, DBUSER, DBPASS, DBNAME);
+$conn = new mysqli(DBHOST, DBUSER, DBPASS, DBNAME);
 
 // Check connection
 if ($conn->connect_error) {
     die("Connection failed: " .$conn->connect_error);
 }
 
-// Create prepare and bind
-$stmt = $conn->prepare("SELECT email FROM users WHERE userName=?");
-$stmt->bind_param("s", $userName);
+// Prerpare and bind
+$stmt = $conn->prepare("SELECT password FROM users WHERE email=?");
+$stmt->bind_param("s", $email);
 
 // Execute the query
 $stmt->execute();
@@ -29,18 +30,13 @@ $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
-    $emailDB = $row['email'];
-    
-    if ($emailDB !== $_SESSION['email']) {
-        $response =false;
+    if ($password === $row["password"]) {
+        echo $response = true;
     } else {
-        $response = true;
+        echo $response = false;
     }
-} else {
-    $response = true;
-};
-echo $response;
+} 
+
 $stmt->close();
 $conn->close();
-
 ?>
