@@ -3,7 +3,7 @@ $(document).ready(function() {
         window.location.href = "personalInf.html";
     });
     $('#sercurity').click(function() {
-        window.location.href = "sercurity.php";
+        window.location.href = "changePass.html";
     });
     $('#deposit').click(function() {
         window.location.href = "deposit.php";
