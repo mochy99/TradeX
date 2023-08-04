@@ -47,13 +47,13 @@ function isValid() {
         type: 'GET',
         data: { userName: userName.val() },
         success: function(response) {
+            console.log(response);
             if (response.trim() === '1') {
                 validate();
                 $('.errorMsg-userName').text('');
-                return true;
+                console
             } else {
                 $('.errorMsg-userName').text('*This one is already in use.');
-                return false;
             }
         },
         error: function (error) {
@@ -68,12 +68,20 @@ function validate() {
     let isValidatedLastName = sanitizeName(lName.val());
     let isValidatedPhoneNum = sanitizePhone(phone.val());
     let isValidatedDate = sanitizeDate(dob.val());
+    console.log(isValidatedFistName);
+    console.log(isValidatedLastName);
+    console.log(isValidatedPhoneNum);
+    console.log(isValidatedDate);
     if (isValidatedFistName &&isValidatedLastName 
         && isValidatedPhoneNum && isValidatedDate) {
         // handle html elements
         $('select').prop('disabled', true);
         $('input[type!="email"]').prop('disabled', true);
         $('.icon').text('edit');
+        $('.errorMsg-fName').text('');
+        $('.errorMsg-lName').text('');
+        $('.errorMsg-phone').text('');
+        $('.errorMsg-dob').text('');
         editing = false;
 
         //capitalize the fName and lName
@@ -88,32 +96,33 @@ function validate() {
     } else{
         eachEle();
     } 
+    // function checking each of element
+    function eachEle() {
+        
+        if (!isValidatedFistName) {
+            $('.errorMsg-fName').text('*Invalid input');
+        } else {
+            $('.errorMsg-fName').text('');
+        }
+        if (!isValidatedLastName) {
+            $('.errorMsg-lName').text('*Invalid input');
+        }  else {
+            $('.errorMsg-lName').text('');
+        }
+        if (!isValidatedPhoneNum) {
+            $('.errorMsg-phone').text('*Invalid input');
+        } else {
+            $('.errorMsg-phone').text('');
+        }
+        if(!isValidatedDate) {
+            $('.errorMsg-dob').text('*Invalid input');
+        } else {
+            $('.errorMsg-dob').text('');
+        }
+    }
 }
 
-// function checking each of element
-function eachEle() {
-    
-    if (!isValidatedFistName) {
-        $('.errorMsg-fName').text('*Invalid input');
-    } else {
-        $('.errorMsg-fName').text('');
-    }
-    if (!isValidatedLastName) {
-        $('.errorMsg-lName').text('*Invalid input');
-    }  else {
-        $('.errorMsg-lName').text('');
-    }
-    if (!isValidatedPhoneNum) {
-        $('.errorMsg-phone').text('*Invalid input');
-    } else {
-        $('.errorMsg-phone').text('');
-    }
-    if(!isValidatedDate) {
-        $('.errorMsg-dob').text('*Invalid input');
-    } else {
-        $('.errorMsg-dob').text('');
-    }
-}
+
 
 //function sanitize the fname lname
  function sanitizeName(name) {
@@ -126,8 +135,9 @@ function eachEle() {
 
 // function sanitize the phone Number
 function sanitizePhone(phone) {
-    if (phone && 
-        (phone.match(regExpLower) || phone.match(regExpUpper) || phone.match(regExpSpecial))) {
+    if ((phone && 
+        (phone.match(regExpLower) || phone.match(regExpUpper) || phone.match(regExpSpecial)))
+        || phone.length > 12) {
         return false;
     } else {
         return true;
@@ -137,7 +147,7 @@ function sanitizePhone(phone) {
 
 // function sanitize the date
 function sanitizeDate(date) {
-    if (date && date.match(regExpDate) || !date) {
+    if (date && date.match(regExpDate) || !date || date === "0000-00-00") {
         return true;
     } else {
         return false;

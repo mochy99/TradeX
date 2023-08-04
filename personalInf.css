@@ -87,6 +87,41 @@ h2 {
     padding-left: var(--gap-default);
     padding-right: var(--gap-default);
 }
+/*Only for changePass.html*/
+.box2 {
+    width: 85vw;
+    display: flex;
+    justify-content: start;
+}
+input[type="checkbox"] {
+    height: 2vh;
+    width: 2vh;
+}
+label[for=show] {
+    font-size: 0.75em;
+    color: rgba(255,255,255, 0.9);
+    text-align: left;
+    font-weight: bold;
+    margin-left: calc(var(--gap-default) / 3);
+}
+
+span {
+    width: 85vw;
+    font-size: 0.65em;
+    color: var(--button-color-2);
+    text-align: left;
+}
+.valid {
+    color: rgba(255,255,255, 0.5);
+}
+.submit{
+    width: 90vw;
+}
+.pending {
+    background-image: linear-gradient(90deg, var(--time-options-color), var(--container-color-1));
+}
+/*end*/
+
 input, select {
     width: 80vw;
     height: 5vh;
