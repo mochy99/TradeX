@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="personalInf.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+    <title>Discover</title>
+</head>
+<body>
+    <section class="header">
+        <div class="material-symbols-outlined" id="exit">arrow_left_alt</div>
+        <h1>Personal Information</h1>
+        <button class="edit">
+            <span class="material-symbols-outlined icon">
+                edit
+            </span> 
+        </button>
+    </section>
+
+    <section class="main">      
+        
+
+        <div class="container">
+            <h2>Current Password</h2>
+            <div class="box">
+                <label for="oldPass">Old Password</label>
+                <input type="password" name="oldPass" id="oldPass" placeholder="********" disabled>
+                <div class="errorMsg-oldPass neg"></div>
+            </div>
+            <div class="box2">
+                <input type="checkbox" name="show" id="show" value ="show">
+                <label for="show">Show password</label>
+            </div>
+            
+        </div>
+
+        <div class="container">
+            <h2>Update your password</h2>
+            
+            <div class="box">
+                <label for="newPass">New password</label>
+                <input type="password" name="newPass" id="newPass" placeholder="********" disabled>
+                <div class="errorMsg-phone neg"></div>
+            </div>
+            <div class="box">
+                <label for="dob">Confirm password</label>
+                <input type="password" name="confirmPass" id="confirmPass" placeholder="********" disabled>
+                <div class="errorMsg-dob neg"></div>
+            </div>
+            <div class="box2">
+                <input type="checkbox" name="show" id="show" value ="show">
+                <label for="show">Show password</label>
+            </div>
+        </div>
+
+       
+        
+    </section>
+    <script src="changePass.js"></script>
+</body>
+</html>
