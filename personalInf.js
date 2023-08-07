@@ -184,9 +184,10 @@ function fetchInf() {
         url: 'userInf.php',
         type: 'GET',
         success: function (data) {
+            console.log(data);
             const refArray = ['#userName', '#firstName', '#lastName', '#email', '#gender', '#phoneNumber', '#dob'];
             let dataArray = data.split(',');
-            for (let i = 0; i < dataArray.length; i++) {
+            for (let i = 0; i < 7; i++) {
                 if (i === (dataArray.length - 1)) {
                     if (dataArray[i] != "0000-00-00") {
                         $(refArray[i]).val(dataArray[i]);
@@ -215,8 +216,9 @@ function postInf() {
     $.ajax({
         url: 'updateUserInf.php',
         type: 'POST',
-        data: { inf: dataInf},
+        data: { inf: dataInf },
         success: function (reply) {
+            console.log(reply);
            $('h1').text(reply);
         },
         error: function (err) {

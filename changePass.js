@@ -22,8 +22,8 @@ const regExpSpecial =/[^a-zA-Z0-9 ]+/g;
 
 
 $(document).ready(function() {
-     //when clicking the exit button
-     $('#exit').click(function() {
+    // When clicking the exit button
+    $('#exit').click(function() {
         window.location.href = 'setting.html';
     })
 
@@ -49,6 +49,7 @@ $(document).ready(function() {
 
     // Event handler for old password blur: Validates input string, updates error message.
     $('#oldPass').blur(function() {
+        $('h1').text('Change Password');
         $.ajax({
             url: 'validatePass.php',
             type: 'POST',
@@ -71,51 +72,56 @@ $(document).ready(function() {
         })
     })
         
-    
-
     // Event handler for new password blur: Validates input string against conditions.
-   newPass.addEventListener('keyup', () => {
-    errorNew.innerText = "";
-    isValidated = validateCond(newPass.value);
-   })
-    // Event handler for confirm password blur: Compares passwords, updates submit button color, and securely updates the database.
-   confirmPass.addEventListener('keyup', () => {
-    errorConfirm.innerText = "";
-    if (newPass.value === confirmPass.value 
-        && isValidated
-        && newPass.value !== old.value) {
-        submit.className = 'not-pending';
-    } 
-   })
-
-   // Update the new password into database when clicking submit btn
-   $('#submit').click(function() {
-    errorNew.innerText = "";
-    errorConfirm.innerText = "";
-    if (newPass.value === confirmPass.value && isValidated && newPass.value !== old.value) {
-        $.ajax({
-            url: 'updatePass.php',
-            type: 'POST',
-            data: { data: newPass.value },
-            success: function (response) {
-                console.log(response);
-                $('h1').text(response);
-             },
-             error: function (err) {
-                 console.error(err);
-             }
-        })
-    } else if (newPass.value === old.value) {
-        errorNew.innerText = "*Please select a different one from the current password."
-        submit.className = 'pending';
-    } else if (newPass.value !== confirmPass.value) {
-        errorConfirm.innerText = "*Passwords do not match"
-        submit.className = 'pending';
-    } else {
-        submit.className = 'pending';
-    }
+    newPass.addEventListener('keyup', () => {
+        errorNew.innerText = "";
+        isValidated = validateCond(newPass.value);
+    })
     
-})
+    // Event handler for confirm password blur: Compares passwords, updates submit button color, and securely updates the database.
+    confirmPass.addEventListener('keyup', () => {
+        errorConfirm.innerText = "";
+        if (newPass.value === confirmPass.value 
+            && isValidated
+            && newPass.value !== old.value) {
+            submit.className = 'not-pending';
+        } 
+    })
+
+    // Update the new password into database when clicking submit btn
+    $('#submit').click(function() {
+        errorNew.innerText = "";
+        errorConfirm.innerText = "";
+        if (newPass.value === confirmPass.value && isValidated && newPass.value !== old.value) {
+            $.ajax({
+                url: 'updatePass.php',
+                type: 'POST',
+                data: { data: newPass.value },
+                success: function (response) {
+                    console.log(response);
+                    $('h1').text(response);
+                    $('#oldPass').val('');
+                    $('#newPass').val('');
+                    $('#confirmPass').val('');
+                    submit.className = 'pending';
+                },
+                error: function (err) {
+                    console.error(err);
+                }
+            })
+        }else if (!old.value) {
+            $('.errorMsg-old').text("Please enter your current password");
+        } else if (newPass.value === old.value) {
+            errorNew.innerText = "*Please select a different one from the current password."
+            submit.className = 'pending';
+        } else if (newPass.value !== confirmPass.value) {
+            errorConfirm.innerText = "*Passwords do not match"
+            submit.className = 'pending';
+        } else {
+            submit.className = 'pending';
+        }
+        
+    })
 })
 
 function validateCond(value) {

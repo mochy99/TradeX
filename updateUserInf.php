@@ -7,7 +7,7 @@ session_start();
 require 'config.php';
 
 
-$data = $_POST['data'];
+$data = $_POST['inf'];
 $email = $_SESSION['email'];
 
 // Create connection
@@ -18,7 +18,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Check if the user already exists in the database
+// Update the information into the database
 
 $updateStmt = $conn->prepare("UPDATE users SET userName=?, fname=?, lname=?, gender=?, phoneNum=?, dob=? WHERE email=?");
 $updateStmt->bind_param("sssssss", $data[0], $data[1], $data[2], $data[3], $data[4], $data[5], $email);

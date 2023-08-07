@@ -6,13 +6,13 @@ $(document).ready(function() {
         window.location.href = "changePass.html";
     });
     $('#deposit').click(function() {
-        window.location.href = "deposit.php";
+        window.location.href = "deposit.html";
     });
     $('#billing').click(function() {
-        window.location.href = "billing.php";
+        window.location.href = "billing.html";
     });
     $('#support').click(function() {
-        window.location.href = "support.php";
+        window.location.href = "support.html";
     });
     $('#logout').click(function() {
         window.location.href = "login.php";

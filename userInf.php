@@ -18,7 +18,7 @@ if ($conn->connect_error) {
 }
 
 // Create prepare and bind
-$stmt = $conn->prepare("SELECT userName,fname,lname,gender,phoneNum, dob 
+$stmt = $conn->prepare("SELECT userName, fname, lname, gender, phoneNum, dob, cardName, cardNum, mExp, yExp, cvv
 FROM users WHERE email=?");
 $stmt->bind_param("s", $email);
 
@@ -30,8 +30,10 @@ $result = $stmt->get_result();
     
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
-    $response = $row['userName'] . ',' . $row['fname'] . ',' .  $row['lname'] . ',' .  
-    $email . ',' .  $row['gender'] . ',' .  $row['phoneNum'] . ',' .  $row['dob'];
+    $response = $row['userName'] . ',' . $row['fname'] . ',' .  $row['lname']   
+    . ',' . $email . ',' .  $row['gender'] . ',' .  $row['phoneNum'] . ',' .  $row['dob']
+    . ',' .  $row['cardName'] . ',' .  $row['cardNum']  . ',' .  $row['mExp']  
+    . ',' .  $row['yExp']  . ',' .  $row['cvv'];
 } else {
     $response ="err";
 };
