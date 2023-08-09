@@ -114,14 +114,14 @@ button {
 @media only screen and (min-width: 413px) and (max-width:1336px) {
     /* For tablet and laptop*/
     .container, button {
-        width: 75vh;
+        width: 75vw;
         height: 8vh;
     }
 }
 @media only screen and (min-width: 1337px) {
     /* For tablet and laptop*/
     .container, button {
-        width: 65vh;
+        width: 65vw;
         height: 8vh;
     }
 

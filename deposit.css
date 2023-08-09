@@ -72,6 +72,7 @@ button {
 }
 .notice {
     justify-content: space-between;
+    width: 90vw;
     height: 40vh;
     background-color: rgba(255,255,255,0.8);
     position:fixed;
@@ -101,11 +102,12 @@ h2 {
     gap: var(--gap-default);
 }
 .box3 {
-    width: 80vw;
+    width: inherit;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: var(--gap-default);
+    padding: var(--gap-default);
 }
 
 input[type="checkbox"] {
@@ -133,7 +135,7 @@ input[type='button'] {
     background-image: linear-gradient(90deg, var(--time-options-color), var(--time-options-color2));
     font-size: 0.8em;
 }
-input[name='deposit'] {
+input[name='money'] {
     font-size: 1.6em;
     font-weight: bold;
 }
@@ -156,8 +158,10 @@ input:focus, select:focus {
     text-align: left;
 }
 
-#submit{
+.submit{
     width: 80vw;
+    font-size: 1.5em;
+    font-weight: bold;
 }
 .pending {
     background-image: linear-gradient(90deg, var(--time-options-color), var(--container-color-1));
@@ -193,19 +197,39 @@ input:focus, select:focus {
     height: min-content;
     color: var(--time-options-color2);
 }
+
 .hidden {
     display: none;
 }
+
 .blur {
     filter: blur(20px);
 }
-
+#available {
+    font-weight: bold;
+    font-size: 1.8em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.border-bot {
+    width: 40vw;
+    border-top: 1px var(--time-options-color) dashed;
+    margin-top: 1.5vh;
+    margin-bottom: 2.5vh;
+}
+#currentBalance {
+    margin-top: 1vh;
+    text-align: center;
+    font-size: 2em;
+}
 @media only screen and (min-width: 413px) and (max-width:1336px) {
     /* For tablet and laptop*/
     .container {
         width: 75vw;
     }
-    input, select, .box2, span, #submit, .error-fName, .error-lName, .error-money {
+    input, select, .notice, .box2, span, .submit, .error-fName, .error-lName, .error-money {
         width: 68vw;
     }
     
@@ -216,8 +240,12 @@ input:focus, select:focus {
     .container {
         width: 50vw;
     }
-    input, select, .box2, span, #submit, .error-fName, .error-lName, .error-money {
+    input, select, .notice, .box2, span, .submit, .error-fName, .error-lName, .error-money {
         width: 45vw;
+    }
+    .box3 {
+        padding-left: 10vw;
+        padding-right: 10vw;
     }
    
 }

@@ -5,7 +5,7 @@ const regExpEmail = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 const regExpDigit = /[0-9]/g;
 const regExpSpecial =/[^a-zA-Z0-9 ]+/g;
 const regExpDate = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
-let money = $('#deposit');
+let money = $('#money');
 let hundredBtn = $('#100');
 let fiveHundredBtn = $('#500');
 let thousandBtn = $('#1000');
@@ -28,6 +28,17 @@ let errorFName = $('.error-fName');
 let errorLName = $('.error-lName');
 let errorName = $('.error-name');
 let errorCvv = $('.error-cvv');
+let deposit = $('#deposit');
+let currentBalance = $('#currentBalance');
+let accountNum = $('#accountNum');
+let recipientName = $('#recipientName');
+let institutionNum = $('#institutionNumber');
+let transitNum = $('#transitNum');
+let errorRecipientName = $('#error-name');
+let errorAccount = $('#error-account');
+let errorInstituiton = $('#error-institution');
+let errorTransit = $('#error-transit');
+let withdraw = $('#withdraw');
 
 
 $(document).ready(function() {
@@ -41,7 +52,7 @@ $(document).ready(function() {
 
     // Validate the input of the money field.
     money.blur(function() {
-        if (sanitizeNumber(money.val())) {
+        if (sanitizeNumber(money.val()) && money.val() > 0) {
             errorMoney.text('');
         } else {
             errorMoney.text('*Invalid input');
@@ -51,18 +62,23 @@ $(document).ready(function() {
     // Handle the amount money button.
     hundredBtn.click(function(){
         money.val(hundredBtn.val());
+        errorMoney.text('');
     })
     fiveHundredBtn.click(function(){
         money.val(fiveHundredBtn.val());
+        errorMoney.text('');
     })
     thousandBtn.click(function(){
         money.val(thousandBtn.val());
+        errorMoney.text('');
     })
     twoThousandBtn.click(function(){
         money.val(twoThousandBtn.val());
+        errorMoney.text('');
     })
     fiveThousandBtn.click(function(){
         money.val(fiveThousandBtn.val());
+        errorMoney.text('');
     })
 
     // Handle the name input
@@ -90,6 +106,14 @@ $(document).ready(function() {
             errorName.text('*Invalid input');
         }
     })
+    recipientName.blur(function() {
+        if (sanitizeName(recipientName.val())) {
+            capitalize(recipientName);
+            errorRecipientName.text('');
+        } else {
+            errorRecipientName.text('*Invalid input');
+        }
+    })
     
     // Display the card number when keyup fires.
     number.keyup(function (eve) {
@@ -100,7 +124,7 @@ $(document).ready(function() {
         let spacedString;
         if (eve.key === "Backspace") {
             let string = number.val().trim();
-            number.value = string;
+            number.val(string);
         } else if (moment === 1) {
             spacedString = value.slice(0, (value.length -1)) + " " + value.slice((value.length -1), value.length);
             spacedString = spacedString.trim();
@@ -122,23 +146,41 @@ $(document).ready(function() {
     })
 
     // Event handler when mouseenter the card number input.
-    number.mouseenter(function() {
+    number.click(function() {
         number.val('');
     })
     
     // Handle to change submit btn color when all fiels are valid
-    document.querySelector('.main').addEventListener('click', () => {
-        if (validForm()) {
-            $('#submit').removeClass('pending');
+   $('.main').click(function () {
+        if (validDepositForm()) {
+            deposit.removeClass('pending');
         } else {
-            $('#submit').addClass('pending');
+            deposit.addClass('pending');
+        }
+        if (validWithdrawForm()) {
+            withdraw.removeClass('pending');
+        } else {
+            withdraw.addClass('pending');
         }
 
     })
     // Handle the form submission.
-    $('#submit').click(function() {
-        if (validForm()) {
-            postInf();
+    deposit.click(function() {
+        if (validDepositForm()) {
+            let dataInf = new Array;
+            dataInf.push('deposit');
+            dataInf.push(save.checked);
+            dataInf.push(parseFloat(money.val()));
+            dataInf.push(fName.val());
+            dataInf.push(lName.val());
+            dataInf.push(nameCard.val());
+            dataInf.push(cardNumberCopy);
+            dataInf.push(parseInt(month.val()));
+            dataInf.push(parseInt(year.val()));
+            dataInf.push(cvvNum.val());
+            console.log(dataInf)
+            console.log(typeof dataInf);
+            depositProcess(dataInf);
             $('.main').addClass('blur');
             $('.notice').removeClass('hidden');
             console.log('done');
@@ -152,13 +194,36 @@ $(document).ready(function() {
         }
     })
 
+    withdraw.click(function() {
+
+        if (validWithdrawForm()) {
+            let dataInf = new Array;
+            dataInf.push('withdraw');
+            dataInf.push('noInf');
+            dataInf.push(parseFloat(money.val()));
+            
+            depositProcess(dataInf);
+            $('.main').addClass('blur');
+            $('.notice').removeClass('hidden');
+            console.log('done1');
+        } else {
+            if (money.val() > currentBalance.text()) {
+                errorMoney.text('Your balance is not enough!');
+            } else {
+                errorMoney.text('');
+            }
+            checkBlank(money,errorMoney);
+            checkBlank(recipientName,errorRecipientName);
+            checkBlank(accountNum,errorAccount);
+            checkBlank(institutionNum,errorInstituiton);
+            checkBlank(transitNum,errorTransit);
+            console.log('done');
+        }
+    })
+
     // Function close btn
     $('.close').click(function() {
-        $('.main').removeClass('blur');
-        $('.notice').addClass('hidden');
-        $('.box3').addClass('hidden');
-        $('#submit').addClass('pending');
-        money.val('');
+        window.location.href = 'mainPage.php';
 
     })
 })
@@ -190,7 +255,8 @@ function fetchInf() {
             if(dataArray[10] !== ""){
                 year.val(dataArray[10]);
             } 
-            cvvNum.val(dataArray[11]);            
+            cvvNum.val(dataArray[11]); 
+            currentBalance.text('$' + dataArray[12]);           
         },
         error: function (err) {
             console.error(err);
@@ -200,7 +266,7 @@ function fetchInf() {
 // Check validation of the amount of money
 function sanitizeNumber(number) {
     if (!(number.match(regExpChar)) && !(number.match(regExpSpecial))
-    ) {
+    && number.length < 9) {
        return true;
     } else {
         return false;
@@ -262,8 +328,8 @@ function checkBlank(field, errorMsg) {
     }
 }
 // check form is valid
-function validForm() {
-    if (money.val() && fName.val() && lName.val() && nameCard.val()
+function validDepositForm() {
+    if (money.val() && money.val() > 0 && fName.val() && lName.val() && nameCard.val()
     && cardNumberCopy && month.val() && year.val() && cvvNum.val() 
     && policy.checked 
     && sanitizeNumber(money.val()) 
@@ -276,20 +342,18 @@ function validForm() {
         return false;
     }
 }
+
+function validWithdrawForm(){
+    if (money.val() && money.val() > 0 && money.val() <= currentBalance.text()
+    && recipientName.val() && accountNum.val() 
+    && institutionNum.val() && transitNum.val()) {
+        return true;
+    } else {
+        return false;
+    }
+}
 // Function send data to server
-function postInf() {
-    let dataInf = new Array;
-    dataInf.push(save.checked);
-    dataInf.push(parseFloat(money.val()));
-    dataInf.push(fName.val());
-    dataInf.push(lName.val());
-    dataInf.push(nameCard.val());
-    dataInf.push(cardNumberCopy);
-    dataInf.push(parseInt(month.val()));
-    dataInf.push(parseInt(year.val()));
-    dataInf.push(cvvNum.val());
-    console.log(dataInf)
-    console.log(typeof dataInf);
+function depositProcess(dataInf) {
     $.ajax({
         url: 'processDeposit.php',
         type: 'POST',
@@ -300,18 +364,27 @@ function postInf() {
             let icon = $('#status-icon');
             let statusPay = $('.status');
             let balance = $('#balance');
+            let updatedBalance = $('#updatedBalance')
             let transactionNum = $('#transactionNumber');
             let cardNum = $('#usedCardNumber');
+            let bankInf = $('#bankInf');
             if ((isNaN(parseInt(responseArray[1])))) {
                 statusPay.text('Please try again!');
                 icon.text('error');
             } else {
                 $('.box3').removeClass('hidden');
-                statusPay.text('Deposit successfully!');
                 icon.text('done');
-                balance.text(responseArray[1]);
                 transactionNum.text(responseArray[0]);
-                cardNum.text(number.val());
+                balance.text(responseArray[1]);
+                if (dataInf[0] == 'deposit') {
+                    statusPay.text('Deposit successfully!');
+                    bankInf.text('Card number');
+                    cardNum.text(number.val());   
+                } else {
+                    statusPay.text('Withdraw successfully!');
+                    bankInf.text('Account number');
+                    cardNum.text(accountNum.val()); 
+                }
             }
 
         },
@@ -320,6 +393,5 @@ function postInf() {
             icon.text('error');
             console.error(err);
         }
-    });
- 
+    }); 
 } 

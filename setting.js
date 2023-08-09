@@ -8,8 +8,8 @@ $(document).ready(function() {
     $('#deposit').click(function() {
         window.location.href = "deposit.html";
     });
-    $('#billing').click(function() {
-        window.location.href = "billing.html";
+    $('#withdraw').click(function() {
+        window.location.href = "withdraw.html";
     });
     $('#support').click(function() {
         window.location.href = "support.html";
@@ -17,4 +17,12 @@ $(document).ready(function() {
     $('#logout').click(function() {
         window.location.href = "login.php";
     });
+    $('.profile').click(function() {
+        window.location.href = "mainPage.php";
+        console.log('hello')
+    });
+    $('.trend').click(function() {
+        window.location.href = "market.php";
+    });
+
 });

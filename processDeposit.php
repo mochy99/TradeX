@@ -36,42 +36,69 @@ if ($result->num_rows > 0) {
 }
 
 $balanceStmt->close();
-$balance = $balance + $data[1];
 
-// Create and update the transaction
-// Create transaction id
 $getTime=time();
-$time = date("HisYmh",$getTime);
+$time = date("His-Ymh",$getTime);
 $transactionID =  $time . 'DP' . $userID;
 $symbol ='DP';
-$transactionType = 'deposit';
 $quantity = 1;
-// Update transaction on database
-$updateTransactionStmt = $conn->prepare("INSERT transactions (transactionID, userID, symbol, transactionType, quantity, price) 
-VALUES (?,?,?,?,?,?)");
-$updateTransactionStmt->bind_param('sissid', $transactionID, $userID, $symbol, $transactionType, $quantity, $data[1]);
-$updateTransactionStmt->execute();
-$updateTransactionStmt->close();
-
-// Update balance and another inf
-$updateAllStmt = $conn->prepare("UPDATE users SET balance=?, fname=?, lname=?,  cardName=?, cardNum=?, mExp=?, yExp=?, cvv=?  WHERE email=?");
-$updateStmt = $conn->prepare("UPDATE users SET balance=?, fname=?, lname=? WHERE email=?");
-
-if ($matched) {
-    if ($data[0]) {
-        $updateAllStmt->bind_param("dssssiiss", $balance, $data[2], $data[3], $data[4], $data[5], $data[6], $data[7], $data[8], $email);
-        $updateAllStmt->execute();
-    } else {
-        $updateStmt->bind_param("isss", $balance, $data[2], $data[3], $email);
-        $updateStmt->execute();
-    }
-    echo $response = $transactionID . ',' . $balance ;
+if ($data[0] === 'deposit') {
+    $balance = $balance + $data[2];
+    updateDeposit();
 } else {
-    echo $response = 'failed';
+    $balance = $balance - $data[2];
+    $transactionID =  $time . 'WD' . $userID;
+    $symbol ='WD';
+    $quantity = -1;
+    updateWithdraw();
 }
 
 
-$updateAllStmt->close();
-$updateStmt->close();
+
+// Update transaction on database
+$updateTransactionStmt = $conn->prepare("INSERT transactions (transactionID, userID, symbol, transactionType, quantity, price) 
+VALUES (?,?,?,?,?,?)");
+$updateTransactionStmt->bind_param('sissid', $transactionID, $userID, $symbol, $data[0], $quantity, $data[2]);
+$updateTransactionStmt->execute();
+$updateTransactionStmt->close();
+
+// Update balance and another inf deposit
+function updateDeposit() {
+    global $matched, $conn, $balance, $data, $email, $transactionID;
+    $updateAllStmt = $conn->prepare("UPDATE users SET balance=?, fname=?, lname=?,  cardName=?, cardNum=?, mExp=?, yExp=?, cvv=?  WHERE email=?");
+    $updateStmt = $conn->prepare("UPDATE users SET balance=?, fname=?, lname=? WHERE email=?");
+    
+    if ($matched) {
+        if ($data[1] == 'true') {
+            $updateAllStmt->bind_param("dssssiiss", $balance, $data[3], $data[4], $data[5], $data[6], $data[7], $data[8], $data[9], $email);
+            $updateAllStmt->execute();
+        } else {
+            $updateStmt->bind_param("dsss", $balance, $data[3], $data[4], $email);
+            $updateStmt->execute();
+        }
+        echo $response = $transactionID . ',' . $balance ;
+    } else {
+        echo $response = 'failed';
+    }
+    
+    
+    $updateAllStmt->close();
+    $updateStmt->close();
+}
+
+//Update balance withdraw
+function updateWithdraw() {
+    global $conn, $balance, $data, $email, $transactionID;
+    $updateStmt = $conn->prepare("UPDATE users SET balance=? WHERE email=?");
+    
+    $updateStmt->bind_param("ds", $balance, $email);
+    $updateStmt->execute();
+    $updateStmt->close();
+        
+    echo $response = $transactionID . ',' . $balance ;
+
+    
+}
+
 $conn->close();
 ?>
