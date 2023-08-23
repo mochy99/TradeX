@@ -152,7 +152,7 @@ button.time {
 
 .item {
     min-width: 60vw;
-    height: 40vh;
+    height: 30vh;
     margin-left: var(--gap-default);
     margin-top: var(--gap-default);
     margin-bottom: var(--gap-default);
@@ -161,45 +161,26 @@ button.time {
     padding: var(--gap-default);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-around;
+    font-size: 1.4em;
+    text-align: center;
 }
-
-.item >div:first-child {
-    width: 5vh;
-    height: 5vh;
-    padding-left: var(--gap-default);
-    background-image: url(image/Logo-Tesla.jpg);
-    background-size: cover;
-    background-position: center;
+img {
+    width: 6vh;
+    height: 6vh;
     border-radius: 50%;
 }
-.item >div:nth-child(2) {
-    height: 22vh;
-    padding-left: var(--gap-default);
-    padding-right: var(--gap-default);
-}
-.item > div:last-child {
-    height: 7vh;
-    padding-left: var(--gap-default);
-    padding-right: var(--gap-default);
-    display: flex;
-    flex-direction: column;
+.price {
+    font-size: 1.5em;
+    font-weight: bold;
+
 }
 .inf {
-    margin-bottom: 5px;
-}
-.inf > div:first-child {
-    padding-top: 5px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
-.inf > div:last-child {
-    display: flex;
-    justify-content: space-between;
-}
-.inf > div:last-child > div:first-child {
-    padding-top: 1vh;
-}
+
 p {
     justify-self: end;
     display: flex;
@@ -208,11 +189,11 @@ p {
     font-style: italic;
 }
 .pos {
-    color: var(--button-color-1);
+    color: var(--button-color-2);
     font-style: italic;
 }
 .neg {
-    color: var(--button-color-2);
+    color: var(--button-color-1);
     font-style: italic;
 }
 
@@ -255,17 +236,7 @@ p {
 
     .item {
         min-width: 40vw;
-        height: 35vh;
-    }
-    .item >div:first-child {
-        width: 3.5vh;
-        height: 3.5vh;
-    }
-    .item >div:nth-child(2) {
         height: 18vh;
-    }
-    .item > div:last-child {
-        height: 7vh;
     }
 }
 @media only screen and (min-width: 1337px) {
@@ -277,19 +248,7 @@ p {
     }
 
     .item {
-        min-width: 20vw;
-        height: 30vh;
-    }
-
-    .item >div:first-child {
-        width: 3.5vh;
-        height: 3.5vh;
-    }
-    .item >div:nth-child(2) {
+        min-width: 40vw;
         height: 18vh;
     }
-    .item > div:last-child {
-        height: 7vh;
-    }
-
 }

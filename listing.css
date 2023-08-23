@@ -107,6 +107,11 @@ h2 {
     flex-direction: column;
     justify-content: space-between;
 }
+img {
+    width: 4vh;
+    height: 4vh;
+    border-radius: 50%;
+}
 .figure {
     flex-grow: 3;
     text-align: right;

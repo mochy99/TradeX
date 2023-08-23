@@ -1,3 +1,4 @@
+<?php include_once "loadingListing.php" ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +9,7 @@
     <script src="market.js"></script>
     <link rel="stylesheet" href="market.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
-    <title>Discover</title>
+    <title>Market</title>
 </head>
 <body>
     <section class="header">
@@ -59,33 +60,40 @@
                 
             </div>   
     
-            <div>
-                <div class="container">
-                    <h3>Most actively traded</h3>
-                    <div class="box">
-                        <section class="item">
-                            <div class="inf">
-                                <div>TSLA</div>
-                                <img src="image/Logo-Tesla.jpg">
-                            </div>
-                            <div class="price">$23.4</div>
-                            <div class="inf">
-                                <div class="pos">+0.6</div>
-                                <div class="pos">+3.22%</div>   
-                            </div>
-                        </section>
-    
-                        
-                    </div>
-                    
-                    <p>More options <span class="material-symbols-outlined">arrow_forward</span></p>
+            <div class="container">
+                <h3>Most actively traded</h3>
+                <div class="box" id='0'>
+                    <?php
+                    loading($mostActivelyTraded,4);
+                    ?>    
                 </div>
-    
+                
+                <p>More options <span class="material-symbols-outlined" id="mostActivelyTraded">arrow_forward</span></p>
             </div>
+            <div class="container">
+                <h3>Top Gainers</h3>
+                <div class="box" id ='1'>
+                    <?php
+                    loading($topGainers,4);
+                    ?>    
+                </div>
+                
+                <p>More options <span class="material-symbols-outlined" id="topGainers">arrow_forward</span></p>
+            </div>
+            <div class="container">
+                <h3>Top Losers</h3>
+                <div class="box" id='2'>
+                    <?php
+                    loading($topLosers,4);
+                    ?>    
+                </div>
+                
+                <p>More options <span class="material-symbols-outlined" id="topLosers">arrow_forward</span></p>
+            </div>
+        
     
-            
     
-        </div>
+          
         
     </section>
     
