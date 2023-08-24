@@ -1,133 +1,108 @@
-
+let limit0 = 4;
+let limit1 = 4;
+let limit2 = 4;
+let data;
+//fetch Top Gainers and Losers
+const link = "https://www.alphavantage.co/query?function=TOP_GAINERS_LOSERS&apikey=Y8XIWI0EEDT64QKU";
+$.ajax({
+    type: "POST",
+    url: "requestAPI.php", 
+    data: { url: link},
+    dataType: "json",
+    success: function (response) {
+        data = response;
+        $('#0').html(loading(data.most_actively_traded, limit0));
+        $('#1').html(loading(data.top_gainers, limit1));
+        $('#2').html(loading(data.top_losers, limit2));
+    },
+    error: function () {
+        console.log("Error fetching data from loadingListing.php");
+    }
+});
+const searchLink = 'https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=t&apikey=Y8XIWI0EEDT64QKU';
+$.ajax({
+    type: "POST",
+    url: "requestAPI.php", 
+    data: { url: searchLink},
+    dataType: "json",
+    success: function (response) {
+        console.log(response);
+    },
+    error: function () {
+        console.log("Error fetching data from loadingListing.php");
+    }
+});
 $(document).ready(function () {
-    limit0 = 4;
-    limit1 = 4;
-    limit2 = 4;
-
-    // 
+    
     $('#mostActivelyTraded').click(function() {
-        console.log('hello');
-        $.ajax({
-            type: "POST",
-            url: "loadingListing.php",
-            data: { index: '0', limit: limit0}, 
-            success: function (response) {
-                console.log(response);
-                $('#0').html(response);
-                limit0 += 4;
-            },
-            error: function () {
-                console.log("Error fetching data from loadingListing.php");
-            }
-        });
-        
+        if (limit0 < 20) {
+            limit0 += 8;
+            $('#0').html(loading(data.most_actively_traded, limit0));   
+        } else {
+            limit0 = 4;
+            $('#0').html(loading(data.most_actively_traded, limit0));
+            $(this).html("More options <span class=\"material-symbols-outlined\" >arrow_forward</span>");
+        }
+        if (limit0 === 20) {
+            $(this).html("Show less <span class=\"material-symbols-outlined\" >arrow_forward</span>");
+        }
     })
 
     $('#topGainers').click(function() {
-        console.log('hello');
-        $.ajax({
-            type: "POST",
-            url: "loadingListing.php",
-            data: { index: '1', limit: limit1}, 
-            success: function (response) {
-                console.log(response);
-                $('#1').html(response);
-                limit1 += 4;
-            },
-            error: function () {
-                console.log("Error fetching data from loadingListing.php");
-            }
-        });
-        
+        if (limit1 < 20) {
+            limit1 += 8;
+            $('#1').html(loading(data.top_gainers, limit1));   
+        } else {
+            limit1 = 4;
+            $('#1').html(loading(data.top_gainers, limit1));
+            $(this).html("More options <span class=\"material-symbols-outlined\" >arrow_forward</span>");
+        }
+        if (limit1 === 20) {
+            $(this).html("Show less <span class=\"material-symbols-outlined\" >arrow_forward</span>");
+        }
     })
 
     $('#topLosers').click(function() {
-        console.log('hello');
-        $.ajax({
-            type: "POST",
-            url: "loadingListing.php",
-            data: { index: '2', limit: limit2}, 
-            success: function (response) {
-                console.log(response);
-                $('#2').html(response);
-                limit2 += 4;
-            },
-            error: function () {
-                console.log("Error fetching data from loadingListing.php");
-            }
-        });
+        if (limit2 < 20) {
+            limit2 += 8;
+            $('#2').html(loading(data.top_losers, limit2));   
+        }else {
+            limit2 = 4;
+            $('#2').html(loading(data.top_losers, limit2));
+            $(this).html("More options <span class=\"material-symbols-outlined\" >arrow_forward</span>");
+        }
+        if (limit2 === 20) {
+            $(this).html("Show less <span class=\"material-symbols-outlined\" >arrow_forward</span>");
+        }
         
+    })  
+
+    $('.search').keyup(function() {
+
     })
-    
-
-
-    $(document).on('click', '.gainer-container, .loser-container', function () {
-        const stockSymbol = $(this).attr('id');
-        console.log(stockSymbol);
-        const url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + stockSymbol + "&outputsize=full&apikey=Y8XIWI0EEDT64QKU";
-
-        $.ajax({
-            type: "GET",
-            url: url,
-            dataType: "json", // Set the dataType to "json" to parse JSON data
-            success: function (data) {
-                const timeSeriesDaily = data["Time Series (Daily)"];
-
-                const formattedData = [];
-
-                for (const date in timeSeriesDaily) {
-                    const entry = timeSeriesDaily[date];
-                    const timestamp = new Date(date).getTime();
-                    const open = parseFloat(entry["1. open"]);
-                    const high = parseFloat(entry["2. high"]);
-                    const low = parseFloat(entry["3. low"]);
-                    const close = parseFloat(entry["4. close"]);
-
-                    formattedData.push([timestamp, open, high, low, close]);
-                }
-
-                // Sort the data by timestamp in ascending order
-                formattedData.sort((a, b) => a[0] - b[0]);
-
-                // Create the Highcharts chart
-                const chart = document.getElementById("chart-container");
-                Highcharts.stockChart(chart, {
-                    rangeSelector: {
-                        selected: 1
-                    },
-                    chart: {
-                        backgroundColor: 'transparent',
-                    },
-                    title: {
-                        text: stockSymbol
-                    },
-                    xAxis: {
-                        type: 'datetime'
-                    },
-                    yAxis: {
-                        title: {
-                            text: 'Price'
-                        }
-                    },
-                    plotOptions: {
-                        candlestick: {
-                            color: 'red',
-                            upColor: 'blue',
-                            lineColor: 'red',
-                            upLineColor: 'green'
-                        }
-                    },
-                    series: [{
-                        type: 'candlestick',
-                        name: 'Stock Price',
-                        data: formattedData,
-                    }]
-                });
-            },
-
-            error: function () {
-                console.log("Error fetching data for stock symbol:", stockSymbol);
-            }
-        });
-    });
 });
+
+function loading(listing, limit) {
+    let html = '';
+    for (i = 0; i < limit; i++) {
+        let stock = listing[i];
+        let className = 'pos';
+        className = (stock['change_amount'] < 0) ? "neg" : className;
+        
+        // Concatenate the HTML string without semicolons at the end of each line
+        html += 
+            "<section class=\"item\">" +
+            "<div class=\"inf\">" +
+            "<div>" + stock['ticker'] + "</div>" +
+            "<img src=\"image/Logo-Tesla.jpg\">" +
+            "</div>" +
+            "<div class=\"price\">$" + stock['price'] + "</div>" +
+            "<div class=\"inf\">" +
+            "<div class=\"" + className + "\">" + stock['change_amount'] + "</div>" +
+            "<div class=\"" + className + "\">" + stock['change_percentage'] + "</div>" +
+            "</div>" +
+            "</section>";
+    
+    }
+    return html;
+}
