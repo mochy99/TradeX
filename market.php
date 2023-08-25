@@ -1,4 +1,3 @@
-<?php include_once "" ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,7 +23,7 @@
             <span class="material-symbols-outlined" id="search">search</span>
         </div>
 
-        <div id="result" class="visible">
+        <div id="result" class="hidden">
             <span class="material-symbols-outlined  close">expand_less</span>
             <div class="container">
                 <h2>ENS</h2>
@@ -49,7 +48,7 @@
             </div>
         </div>
 
-        <div class="visible"> 
+        <div id ="topList" class="visible"> 
     
             <div class="container">
                 <h3>Most actively traded</h3>
@@ -68,12 +67,7 @@
                 <div class="box" id='2'></div>
                 
                 <p id="topLosers">More options <span class="material-symbols-outlined" >arrow_forward</span></p> 
-            </div>
-        
-    
-    
-          
-        
+            </div>   
     </section>
     
     <section class="nav">
