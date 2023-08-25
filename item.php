@@ -31,7 +31,7 @@ session_start();
 
             <section class="graphic">
                 <div class="graph" id ="graph">
-                    We could not load the graph at this time. Check back soon.
+                    
                 </div>
                 <div class="selectors">
                     <button class="time day">D</button>
@@ -85,6 +85,36 @@ session_start();
             
         </section>
         
+    </section>
+
+    <section class="container hidden" id="buy">
+        <h1>Account Information</h1>
+        <div id="available">
+            <div class="border-bot"></div>
+            <h2>My balance</h2>
+            <span id="currentBalance"></span>
+            <div class="border-bot"></div>   
+        </div>
+        
+        <div>
+            <div>Money</div>
+            <input type="text" name="money" id="money">
+            
+        </div>
+        <div>
+            <div>Quantity</div>
+            <input type="text" name="quality" id="quality">    
+        </div>
+            
+        
+        <div class="error neg"></div>
+            
+
+          
+        </div>
+
+        <button class="submit pending" id="withdraw">Buy</button>
+
     </section>
     
 </body>
