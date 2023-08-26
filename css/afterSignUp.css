@@ -109,7 +109,7 @@ span {
     color: var(--button-color-1);
     text-align: left;
 }
-.error {
+#error {
     color: var(--error-color);
     margin-bottom: calc(var(--gap-default / 3));
 }
