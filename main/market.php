@@ -1,19 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <script src="market.js"></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
-    <link rel="stylesheet" href="market.css">
-    <title>Market</title>
+<?php
+include_once "../template/error.php";
+include_once "../template/session.php";
+include_once "../template/head.php"; 
+?>
+    <script src="../js/market.js"></script>
+    <link rel="stylesheet" href="../css/market.css">
+    <title>Discover</title>
 </head>
 <body>
     <section class="header">
         <h1>Discover</h1>
-        <div class="right-top-nav">TradeX</div>
     </section>
 
     <section class="main">
