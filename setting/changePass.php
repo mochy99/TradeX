@@ -1,13 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
-    <link rel="stylesheet" href="personalInf.css">
+<?php
+include_once "../server/userInf+.php";
+include_once "../template/head.php"; 
+?>
+    <script src="../js/helper.js"></script>
+    <script src="../js/changePass.js"></script>
+    <link rel="stylesheet" href="../css/personalInf.css">
     <title>Discover</title>
 </head>
 <body>
@@ -51,16 +48,16 @@
                 <input type="checkbox" name="showNew" id="showNew" value ="show">
                 <label for="showNew">Show password</label>
             </div>
-            <span class="length">Must contain at least 8 characters</span>
-            <span class="uppercase">Must contain at least 1 uppercase</span>
-            <span class="lowercase">Must contain at least 1 lowercase</span>
-            <span class="digit">Must contain at least 1 number</span>
-            <span class="special">Must contain at least 1 special character ~`!@#$%^&*()-_+={}[]|\;:"<>,./?</span>
+            <span id="length">Must contain at least 8 characters</span>
+            <span id="uppercase">Must contain at least 1 uppercase</span>
+            <span id="lowercase">Must contain at least 1 lowercase</span>
+            <span id="digit">Must contain at least 1 number</span>
+            <span id="special">Must contain at least 1 special character ~`!@#$%^&*()-_+={}[]|\;:"<>,./?</span>
         </div>
         <button class="submit pending" id="submit">Submit</button>
        
         
     </section>
-    <script src="changePass.js"></script>
+    
 </body>
 </html>

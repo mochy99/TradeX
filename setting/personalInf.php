@@ -1,6 +1,7 @@
 <?php
 include_once "../server/userInf+.php";
-include_once "../template/head.php"; ?>
+include_once "../template/head.php"; 
+?>
     <script src="../js/personalInf.js"></script>
     <script src="../js/helper.js"></script>
     <link rel="stylesheet" href="../css/personalInf.css">
