@@ -1,8 +1,7 @@
 <?php
-
-include_once "template/error.php";
-require 'config.php';
-session_start();
+include_once "../template/error.php";
+require "../template/session.php";
+require '../template/config.php';
 ?>
 
 <?php
@@ -27,10 +26,9 @@ $stmt->execute();
 $result = $stmt->get_result();
     
 if ($result->num_rows > 0) {
-    $user = $result->fetch_assoc();   
-} else {
-    $response ="err";
+    $user = $result->fetch_assoc();;
 };
+
 $stmt->close();
 $conn->close();
 
