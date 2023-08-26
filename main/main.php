@@ -1,23 +1,10 @@
 <?php
-// error reporting
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-session_start();
-if (!isset($_SESSION["email"])) {
-    header("Location: login.php");
-     exit;
-} 
+include_once "../template/error.php";
+include_once "../template/session.php";
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
-    <link rel="stylesheet" href="mainPage.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+<?php include_once "../template/head.php"; ?>
+    <script src="../js/main.js"></script>
+    <link rel="stylesheet" href="../css/main.css">
     <title>Trade Now</title>
 </head>
 <body>
@@ -68,11 +55,4 @@ if (!isset($_SESSION["email"])) {
         <section class="blank"></section>
     </section>
     
-    <section class="nav">
-        <span class="profile material-symbols-outlined">person</span>
-        <span class="trend material-symbols-outlined inactive">query_stats</span>
-        <span class="setting material-symbols-outlined inactive">settings</span>
-    </section>
-    <script src="mainPage.js"></script>
-</body>
-</html>
+    <?php include_once "../template/footer.php" ?>
