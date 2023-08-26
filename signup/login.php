@@ -1,24 +1,17 @@
 <?php
-// error reporting
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
+include_once "../template/error.php";
 session_start();
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="nextsignup.css">
+<?php include_once "../template/head.php"; ?>
+    <script src="../js/login.js"></script>
+    <link rel="stylesheet" href="../css/afterSignUp.css">
     <title>Sign up TradeX</title>
 </head>
 <body>
     <div class="container">
         <h1>TradeX</h1>
         <h3>Welcome back!</h3>
-        <form action="checkedUser.php" method="post">
+        <form action="../server/validateUser.php" method="post">
             <div class="box1">
                 <input type="text" name="email" id="email" placeholder="me@gmail.com" required
                 > 
@@ -28,7 +21,7 @@ session_start();
                 <input type="checkbox" name="show" id="show" value ="show">
                 <label for="show">Show password</label>
             </div>
-            <span class="error">
+            <span id="error">
                 <?php
                 if (isset($_SESSION["isAttemptedLogIn"])) {
                     $_SESSION["isAttemptedLogIn"] = false;
@@ -40,8 +33,5 @@ session_start();
     
         </form>
     </div>
-    
-    <script src="login.js"></script>
-
 </body>
 </html>
