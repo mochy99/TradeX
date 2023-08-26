@@ -1,0 +1,286 @@
+:root {
+    --height-header:10vh;
+    --border-radius: 5%;
+    --gap-default: 10px;
+    --background-color-purple: rgb(37,18,71);
+    --background-color-blue: rgb(24,32,46);
+    --button-color-1:  rgb(220,79,248);
+    --button-color-2: rgb(70,195,249);
+    --time-options-color: rgba(64, 94, 140, 0.7);
+    --time-options-color2: rgba(33, 42, 54, 0.7);
+    --container-color-1: rgba(45, 85, 139, 0.5);
+    --container-color-2: rgba(45, 9, 98, 0.3);
+}
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;   
+    color: white;
+}
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-image: linear-gradient(90deg, var(--background-color-purple), var(--background-color-blue));
+}
+
+.header {
+    width: 95vw;
+    height: var(--height-header);
+    position:fixed;
+    top: 0px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-image: linear-gradient(90deg, var(--background-color-purple), var(--background-color-blue));
+    z-index: 2;
+}
+
+.main{
+    margin-top: var(--height-header);
+    margin-bottom: var(--height-header);
+    width: 95vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: var(--gap-default);
+}
+
+button {
+    background-image: linear-gradient(90deg, var(--button-color-1), var(--button-color-2));
+    border: none;
+    width: 7vh;
+    height: 5vh;
+    border-radius: 10px;
+}
+
+.container {
+    background-image:linear-gradient(175deg, var(--container-color-1), var(--container-color-2));
+    width: 90vw;
+    height: max-content;
+    border-radius: var(--gap-default);
+    padding: var(--gap-default);
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: calc(2 * var(--gap-default));
+    gap: var(--gap-default);
+}
+.notice {
+    justify-content: space-between;
+    width: 90vw;
+    height: 40vh;
+    background-color: rgba(255,255,255,0.8);
+    position:fixed;
+    top: auto;
+    bottom: auto;
+}
+
+h2 {
+    font-size: 1.2em;
+}
+
+.box {
+    background-color: rgba(255,255,255,0.12);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: var(--gap-default);
+    gap: var(--gap-default)
+}
+
+.box2 {
+    width: 80vw;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: var(--gap-default);
+}
+.box3 {
+    width: inherit;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--gap-default);
+    padding: var(--gap-default);
+}
+
+input[type="checkbox"] {
+    height: 2vh;
+    width: 2vh;
+}
+
+input, select {
+    width: 80vw;
+    height: 5vh;
+    background-color: transparent;
+    padding-left: var(--gap-default);
+    border: 2px solid transparent;
+    border-radius: 10px;
+    border-image: linear-gradient(90deg, var(--button-color-1), var(--button-color-2)) 1;
+    border-image-slice: 1;  
+}
+
+input[type='email'] {
+    color: rgba(255, 255, 255, 0.55)
+}
+input[type='button'] {
+    padding: 0;
+    border: none;
+    background-image: linear-gradient(90deg, var(--time-options-color), var(--time-options-color2));
+    font-size: 0.8em;
+}
+input[name='money'] {
+    font-size: 1.6em;
+    font-weight: bold;
+}
+select {
+    appearance: none;
+}
+
+
+input:focus, select:focus {
+    outline-style: none;
+}
+.error {
+    justify-content: space-evenly;
+}
+
+.error-money, .error-fName, .error-lName {
+    width: 80vw;
+}
+.error-money {
+    text-align: left;
+}
+
+.submit{
+    width: 80vw;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+.pending {
+    background-image: linear-gradient(90deg, var(--time-options-color), var(--container-color-1));
+}
+.neg {
+    color: var(--button-color-1);
+    font-style: italic;
+}
+.pos {
+    color: var(--button-color-2);
+}
+
+
+
+
+
+
+.hidden {
+    visibility: hidden;
+    display: none;
+}
+
+.blur {
+    filter: blur(20px);
+}
+/*----- Notice board -----*/
+#buy, #notice {
+    width: 90vw;   
+    position: fixed;
+    top: 10vh;
+    border-radius: var(--gap-default);
+    padding: var(--gap-default);
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-top: var(--gap-default);
+    gap: 10px;
+}
+#notice {
+    top: 30vh;
+}
+
+#status {
+    font-size: 1.9em;
+}
+#status-icon {
+    font-size: 2.5em;
+    height: min-content;
+}
+#available {
+    font-weight: bold;
+    font-size: 1.2em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+}
+.border-bot {
+    width: 60vw;
+    border-top: 1px var(--time-options-color) dashed;
+    margin-top: 1.5vh;
+    margin-bottom: 2.5vh;
+}
+.dark-font {
+    font-size: 1em;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    gap: var(--gap-default);
+    margin: 1vh;
+}
+#currentBalance {
+    margin-top: 1vh;
+    text-align: center;
+    font-size: 1.5em;
+}
+
+
+.bold {
+    color: white;;
+    font-size: 1.4em;
+    font-weight: bolder;
+}
+@media only screen and (min-width: 413px) and (max-width:1336px) {
+    /* For tablet and laptop*/
+    .container {
+        width: 75vw;
+    }
+    input, select, .notice, .box2, span, .submit, .error-fName, .error-lName, .error-money {
+        width: 68vw;
+    }
+    .dark-font {
+        font-size: 1em;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+@media only screen and (min-width: 1337px) {
+    /* For tablet and laptop*/
+    .container {
+        width: 50vw;
+    }
+    input, select, .notice, .box2, span, .submit, .error-fName, .error-lName, .error-money {
+        width: 45vw;
+    }
+    .box3 {
+        padding-left: 10vw;
+        padding-right: 10vw;
+    }
+    .dark-font {
+        font-size: 1em;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+   
+}

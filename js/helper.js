@@ -70,3 +70,28 @@ function checkBlank(field, errorMsg) {
         errorMsg.text() === '*Required' ? errorMsg.text('') : null;   
     }
 }
+
+// Hanlde select money 
+function selectMoney() {
+    
+    hundredBtn.click(function(){
+        money.val(hundredBtn.val());
+        errorMoney.text('');
+    })
+    fiveHundredBtn.click(function(){
+        money.val(fiveHundredBtn.val());
+        errorMoney.text('');
+    })
+    thousandBtn.click(function(){
+        money.val(thousandBtn.val());
+        errorMoney.text('');
+    })
+    twoThousandBtn.click(function(){
+        money.val(twoThousandBtn.val());
+        errorMoney.text('');
+    })
+    fiveThousandBtn.click(function(){
+        money.val(fiveThousandBtn.val());
+        errorMoney.text('');
+    })
+}

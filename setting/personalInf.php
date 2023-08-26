@@ -5,7 +5,7 @@ include_once "../template/head.php";
     <script src="../js/personalInf.js"></script>
     <script src="../js/helper.js"></script>
     <link rel="stylesheet" href="../css/personalInf.css">
-    <title>Discover</title>
+    <title>Information</title>
 </head>
 <body>
     <section class="header">

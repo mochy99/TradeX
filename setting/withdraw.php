@@ -23,12 +23,7 @@
         <div class="container">
             
             <h1>Account Information</h1>
-            <div id="available">
-                <div class="border-bot"></div>
-                <h2>My balance</h2>
-                <span id="currentBalance"></span>
-                <div class="border-bot"></div>   
-            </div>
+            <?php include_once '../template/currentBalance.php'; ?>
             
             <div>Select amount to withdraw</div>
             <input type="text" name="money" id="money">

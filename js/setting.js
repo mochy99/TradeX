@@ -21,5 +21,6 @@ $(document).ready(function() {
     $('.trend').click(function() {
         window.location.href = "market.php";
     });
+    $('.setting').removeClass('inactive');
 
 });

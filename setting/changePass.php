@@ -5,7 +5,7 @@ include_once "../template/head.php";
     <script src="../js/helper.js"></script>
     <script src="../js/changePass.js"></script>
     <link rel="stylesheet" href="../css/personalInf.css">
-    <title>Discover</title>
+    <title>Security</title>
 </head>
 <body>
     <section class="header">

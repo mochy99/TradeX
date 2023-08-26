@@ -13,7 +13,6 @@ $(document).ready(function() {
     let year = $('#expiryYear');
     let cvvNum = $('#cvv');
     let cardNumberCopy;
-    let cardNumberCopyDB;
     let policy = document.getElementById('policy');
     let save = document.getElementById('save');
     let errorMoney = $('.error-money');
@@ -33,17 +32,21 @@ $(document).ready(function() {
     let errorInstituiton = $('#error-institution');
     let errorTransit = $('#error-transit');
     let withdraw = $('#withdraw');
-    // Function fetch information on the html
-    fetchInf();
+    
+    if(number.val()){
+        cardNumberCopy = number.val();
+        let cardNum = "**** **** **** " + number.val().slice(12);
+        number.val(cardNum);
+    } 
 
     // Function when clicking the exit btn
     $('#exit').click(function() {
-        window.location.href = 'setting.html';
+        window.location.href = '../main/setting.php';
     })
 
     // Validate the input of the money field.
     money.blur(function() {
-        if (sanitizeNumber(money.val()) && money.val() > 0) {
+        if (isInteger(money.val()) && money.val() > 0) {
             errorMoney.text('');
         } else {
             errorMoney.text('*Invalid input');
@@ -71,10 +74,9 @@ $(document).ready(function() {
         money.val(fiveThousandBtn.val());
         errorMoney.text('');
     })
-
     // Handle the name input
     fName.blur(function() {
-        if (sanitizeName(fName.val())) {
+        if (validatedName(fName.val())) {
             capitalize(fName);
             errorFName.text('');
         } else {
@@ -82,7 +84,7 @@ $(document).ready(function() {
         }
     })
     lName.blur(function() {
-        if (sanitizeName(lName.val())) {
+        if (validatedName(lName.val())) {
             capitalize(lName);
             errorLName.text('');
         } else {
@@ -90,7 +92,7 @@ $(document).ready(function() {
         }
     })
     nameCard.blur(function() {
-        if (sanitizeName(nameCard.val())) {
+        if (validatedName(nameCard.val())) {
             capitalize(nameCard);
             errorName.text('');
         } else {
@@ -98,7 +100,7 @@ $(document).ready(function() {
         }
     })
     recipientName.blur(function() {
-        if (sanitizeName(recipientName.val())) {
+        if (validatedName(recipientName.val())) {
             capitalize(recipientName);
             errorRecipientName.text('');
         } else {
@@ -157,6 +159,7 @@ $(document).ready(function() {
 
     // // Function handle deposit btn
     deposit.click(function() {
+        console.log(validDepositForm());
         if (validDepositForm()) {
             let dataInf = new Array;
             dataInf.push('deposit');
@@ -171,11 +174,9 @@ $(document).ready(function() {
             dataInf.push(cvvNum.val());
             depositProcess(dataInf);
             $('.main').addClass('blur');
-            $('.notice').removeClass('hidden');
+            $('#notice').removeClass('hidden');
         } else {
             checkBlank(money,errorMoney);
-            checkBlank(fName,errorFName);
-            checkBlank(lName,errorLName);
             checkBlank(nameCard,errorName);
             checkBlank(number,errorNumber);
             checkBlank(cvvNum,errorCvv);
@@ -191,7 +192,7 @@ $(document).ready(function() {
             dataInf.push(parseFloat(money.val()));            
             depositProcess(dataInf);
             $('.main').addClass('blur');
-            $('.notice').removeClass('hidden');
+            $('#notice').removeClass('hidden');
            
         } else {
             if (money.val() > parseFloat(currentBalance.text())) {
@@ -210,44 +211,10 @@ $(document).ready(function() {
 
     // Function close btn
     $('.close').click(function() {
-        window.location.href = 'mainPage.php';
+        window.location.href = '../main/main.php';
     })
 
-    // Function to fecth information using get request
-    function fetchInf() {
-        $.ajax({
-            url: 'userInf.php',
-            type: 'GET',
-            success: function (data) {
-                let dataArray = data.split(',');
-                console.log(dataArray);
-                fName.val(dataArray[1]); 
-                lName.val(dataArray[2]); 
-                $('#email').val(dataArray[3]);
-                nameCard.val(dataArray[7]);
-                let cardNum;
-                if(dataArray[8] !== ""){
-                    cardNumberCopy = dataArray[8];
-                    cardNum = "**** **** **** " + dataArray[8].slice(12);
-                } else {
-                    cardNum = "";
-                }
-                
-                number.val(cardNum);
-                if(dataArray[9] !== ""){
-                    month.val(dataArray[9]);
-                } 
-                if(dataArray[10] !== ""){
-                    year.val(dataArray[10]);
-                } 
-                cvvNum.val(dataArray[11]); 
-                currentBalance.text(dataArray[12]);           
-            },
-            error: function (err) {
-                console.error(err);
-            }
-        })
-    }
+    
 /* -------------------HELPER FUNCTIONS ----------------------------*/
     // Validate the card number
     function validateCardNum(num) {
@@ -275,14 +242,13 @@ $(document).ready(function() {
 
     // Check form is valid
     function validDepositForm() {
-        if (money.val() && money.val() > 0 && fName.val() && lName.val() && nameCard.val()
+        console.log(isInteger(money.val()));
+        if (money.val() > 0  && nameCard.val()
         && cardNumberCopy && month.val() && year.val() && cvvNum.val() 
         && policy.checked 
-        && sanitizeNumber(money.val()) 
-        && sanitizeName(fName.val())
-        && sanitizeName(lName.val()) 
+        && isInteger(money.val())  
         && validateCardNum(cardNumberCopy)
-        && sanitizeName(nameCard.val())) {
+        && validatedName(nameCard.val())) {
             return true;
         } else {
             return false;
@@ -301,17 +267,14 @@ $(document).ready(function() {
     // Function send data to server
     function depositProcess(dataInf) {
         $.ajax({
-            url: 'processDeposit.php',
+            url: '../server/processPayment.php',
             type: 'POST',
             data: { inf: dataInf },
             success: function (response) {
                 console.log(response);
                 let responseArray = response.split(',');
-                let icon = $('#status-icon');
-                let statusPay = $('.status');
+                let statusPay = $('#status');
                 let balance = $('#balance');
-                let updatedBalance = $('#updatedBalance')
-                let transactionNum = $('#transactionNumber');
                 let cardNum = $('#usedCardNumber');
                 let bankInf = $('#bankInf');
                 if ((isNaN(parseInt(responseArray[1])))) {
@@ -319,15 +282,17 @@ $(document).ready(function() {
                     icon.text('error');
                 } else {
                     $('.box3').removeClass('hidden');
-                    icon.text('done');
-                    transactionNum.text(responseArray[0]);
+                    $('#status-icon').text('done');
+                    $('#transactionNumber').text(responseArray[0]);
                     balance.text(responseArray[1]);
                     if (dataInf[0] == 'deposit') {
                         statusPay.text('Deposit successfully!');
+                        bankInf.parent().removeClass('hidden');
                         bankInf.text('Card number');
                         cardNum.text(number.val());   
                     } else {
                         statusPay.text('Withdraw successfully!');
+                        bankInf.parent().removeClass('hidden');
                         bankInf.text('Account number');
                         cardNum.text(accountNum.val()); 
                     }
