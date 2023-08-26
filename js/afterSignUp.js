@@ -25,7 +25,7 @@ $(document).ready(function() {
   
     // Redirect to homepage.php when h1 element is clicked
     homepage.on("click", function() {
-      window.location.href = "homepage.php";
+      window.location.href = "../index.php";
     });
   
     // Update password strength indicators and validate on keyup
