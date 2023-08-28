@@ -20,16 +20,15 @@ include_once "../template/head+.php";
                 <h3><?php echo $_SESSION["percentage"]; ?></h3>
             </section>
 
-            <section class="graphic">
+            <section class="graphic highcharts-figure">
                 <div class="graph" id ="graph">
                     
                 </div>
                 <div class="selectors">
-                    <button class="time day">D</button>
-                    <button class="time month">M</button>
-                    <button class="time quarter">Q</button>
-                    <button class="time year">Y</button>
-                    <button class="time all">All</button>
+                    <button class="time clicked" id ="day">D</button>
+                    <button class="time unclicked" id ="month">M</button>
+                    <button class="time unclicked"id ="year">Y</button>
+                    <button class="time unclicked"id ="full">All</button>
                 </div>   
             </section>
 

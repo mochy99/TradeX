@@ -13,6 +13,13 @@ $(document).ready(function() {
     const thousandBtn = $('#1000');
     const twoThousandBtn = $('#2000');
     const fiveThousandBtn = $('#5000');
+    const formattedDateData = [];
+    let timeSeriesDay = [];
+    let timeSeriesIntaDay = []; //the most recent full 30 days of intraday data 
+    let timeSeriesDaily = [];
+    let timeSeriesFull = [];
+    let timeSeriesMonth = [];
+    let timeSeriesYear = [];
 
     
     // Handle event when clicking back btn
@@ -138,67 +145,114 @@ $(document).ready(function() {
         window.location.href = '../main/main.php';
     })
 
-    const stockSymbol = $('#symbol').text();
-    const url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + stockSymbol + "&outputsize=full&apikey=Y8XIWI0EEDT64QKU";
+    // Function interval of time series
+    $(document.body).on('click', '#day, #month, #year, #full', function() {
+        $(this).addClass("clicked").removeClass('unclicked');
+        let id = $(this).attr('id');
+        let btn = 'button.time:not(#' + id + ')';
+        $(btn).addClass("unclicked").removeClass('clicked');
+        
+    })
 
+    $('#month').on('click', function() {    
+        if (timeSeriesMonth) {
+            requestDailyTimeSeries("Monthly Time Series",timeSeriesMonth);            
+        } else {
+            timeSeriesChart("Monthly Time Series",timeSeriesMonth);
+        }
+        
+        console.log(timeSeriesMonth);        
+    })
+    $('#year').on('click', function() {
+        if (timeSeriesYear) {
+            requestDailyTimeSeries("Yearly Time Series",timeSeriesYear);            
+        } else {
+            timeSeriesChart("Yearly Time Series",timeSeriesYear);
+        }
+        
+    })
+    $('#full').on('click', function() {
+        if (timeSeriesFull) {
+            requestDailyTimeSeries("Time Series",timeSeriesFull);            
+        } else {
+            timeSeriesChart("Time Series",timeSeriesFull);
+        }
+    })
+
+    const stockSymbol = $('#symbol').text();
+    //const url = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=IBM&interval=5min&outputsize=full&apikey=demo"
+    const url = '../data/intraday_test.json';
     $.ajax({
         type: "GET",
         url: url,
         dataType: "json", 
         success: function (data) {
-            const timeSeriesDaily = data["Time Series (Daily)"];
-            console.log(data);
-            const formattedData = [];
-            let max = 0;
-            let min = 0;
+            timeSeriesIntaDay= data["Time Series (5min)"];
+            let lastTime = new Date().getDay();
+            for (const date in timeSeriesIntaDay) {
+                const entry = timeSeriesIntaDay[date];
+                const day = new Date(date).getDate();
+                if ((lastTime - day) < 1) {
+                    const timestamp = new Date(date).getTime();
+                    const open = parseFloat(entry["1. open"]);
+                    const high = parseFloat(entry["2. high"]);
+                    const low = parseFloat(entry["3. low"]);
+                    const close = parseFloat(entry["4. close"]);
+                    const volume = parseFloat(entry["5. volume"]);
 
-            for (const date in timeSeriesDaily) {
-                const entry = timeSeriesDaily[date];
-                const timestamp = new Date(date).getTime();
-                const open = parseFloat(entry["1. open"]);
-                const high = parseFloat(entry["2. high"]);
-                const low = parseFloat(entry["3. low"]);
-                const close = parseFloat(entry["4. close"]);
-                max = (max < high) ? high : max;
-                min = (min > low) ? high : min;
-
-                formattedData.push([timestamp, open, high, low, close]);
+                    formattedDateData.push([timestamp, open, high, low, close, volume]);
+                }    
             }
-
-            // Sort the data by timestamp in ascending order
-            formattedData.sort((a, b) => a[0] - b[0]);
-            console.log(formattedData);
-            // Create the Highcharts chart
-            Highcharts.stockChart("graph", {
-                rangeSelector: {
-                    selected: 1
-                },
-                title: {
-                    text: stockSymbol
-                },
-                xAxis: {
-                    type: 'datetime'
-                },
-                yAxis: {
-                    title: {
-                        text: 'Price'
-                    }
-                },
-                
-                series: [{
-                    name: 'Stock Price',
-                    data: formattedData,
-                    tooltip: {
-                        valueDecimals: 2
-                    }
-                }], 
-               
-            });
+            formattedDateData.sort((a, b) => a[0] - b[0]);
+            timeSeriesChart(stockSymbol,formattedDateData);
+            
         },
-
         error: function () {
             $("#graph").text("We could not load the graph at this time. Check back soon.");
         }
     });
+    
+    function requestDailyTimeSeries(title,dataBase) {
+        $.ajax({
+            type: "GET",
+            url: "../data/daily_test.json",
+            dataType: "json", 
+            success: function (data) {
+                timeSeriesDaily = data["Time Series (Daily)"];
+                const currentMonth = new Date().getMonth();
+                const currentYear = new Date().getFullYear();
+                for (const date in timeSeriesDaily) {
+                    const entry = timeSeriesDaily[date];
+                    const time = date.split("-");
+                    const month = parseInt(time[1]);
+                    const yearVal = parseInt(time[0]);
+    
+                    const timestamp = new Date(date).getTime();
+                    const open = parseFloat(entry["1. open"]);
+                    const high = parseFloat(entry["2. high"]);
+                    const low = parseFloat(entry["3. low"]);
+                    const close = parseFloat(entry["4. close"]);
+                    const volume = parseFloat(entry["5. volume"]);
+                    if ((currentMonth ==  month) && (currentYear == yearVal)) {
+                        timeSeriesMonth.push([timestamp, open, high, low, close, volume]);
+                        timeSeriesYear.push([timestamp, open, high, low, close, volume]);
+                        timeSeriesFull.push([timestamp, open, high, low, close, volume]);
+                    } else if (currentYear == yearVal) {
+                        timeSeriesYear.push([timestamp, open, high, low, close, volume]);
+                        timeSeriesFull.push([timestamp, open, high, low, close, volume]);
+                    } else {
+                        timeSeriesFull.push([timestamp, open, high, low, close, volume]);
+                    }               
+                }
+                timeSeriesMonth.sort((a, b) => a[0] - b[0]);
+                timeSeriesYear.sort((a, b) => a[0] - b[0]);
+                timeSeriesFull.sort((a, b) => a[0] - b[0]); 
+                timeSeriesChart(title,dataBase);          
+            },
+            error: function () {
+                $("#graph").text("We could not load the graph at this time. Check back soon.");
+            }
+        });
+    }
     
 })

@@ -71,27 +71,101 @@ function checkBlank(field, errorMsg) {
     }
 }
 
-// Hanlde select money 
-function selectMoney() {
-    
-    hundredBtn.click(function(){
-        money.val(hundredBtn.val());
-        errorMoney.text('');
-    })
-    fiveHundredBtn.click(function(){
-        money.val(fiveHundredBtn.val());
-        errorMoney.text('');
-    })
-    thousandBtn.click(function(){
-        money.val(thousandBtn.val());
-        errorMoney.text('');
-    })
-    twoThousandBtn.click(function(){
-        money.val(twoThousandBtn.val());
-        errorMoney.text('');
-    })
-    fiveThousandBtn.click(function(){
-        money.val(fiveThousandBtn.val());
-        errorMoney.text('');
-    })
+// Create the Highcharts chart
+function timeSeriesChart(title,data) {
+
+    Highcharts.chart("graph", {
+        chart: {
+            zoomType: 'x',
+            backgroundColor: "rgba(45, 85, 139, 0.5)"
+        },
+        title: {
+            text: title,
+            align: 'center',
+        },
+        xAxis: {
+            type: 'datetime'
+        },
+        yAxis: {
+            title: {
+                text: 'Price'
+            }, 
+        },
+        plotOptions: {
+            area: {
+                fillColor: {
+                    linearGradient: {
+                        x1: 0,
+                        y1: 0,
+                        x2: 0,
+                        y2: 1
+                    },
+                    stops: [
+                        [0, Highcharts.getOptions().colors[0]],
+                        [1, Highcharts.color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                    ]
+                },
+                marker: {
+                    radius: 2
+                },
+                lineWidth: 3,
+                states: {
+                    hover: {
+                        lineWidth: 1
+                    }
+                },
+                series: {
+                    color: '#FFFFFF' // Set your desired color here
+                },
+                threshold: null
+            }
+        },
+        series: [{
+            name: 'Stock Price',
+            data: data,
+            tooltip: {
+                valueDecimals: 2,
+                backgroundColor: '#FCFFC5',
+                borderColor: 'black',
+                borderRadius: 10,
+                borderWidth: 3
+            }
+        }],    
+    });
+    Highcharts.theme = {
+        colors: ['#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572',
+                 '#FF9655', '#FFF263', '#6AF9C4'],
+        chart: {
+            backgroundColor: {
+                linearGradient: [0, 0, 500, 500],
+                stops: [
+                    [0, 'rgb(255, 255, 255)'],
+                    [1, 'rgb(240, 240, 255)']
+                ]
+            },
+        },
+        title: {
+            style: {
+                color: '#000',
+                font: 'bold 16px "Trebuchet MS", Verdana, sans-serif'
+            }
+        },
+        subtitle: {
+            style: {
+                color: '#666666',
+                font: 'bold 12px "Trebuchet MS", Verdana, sans-serif'
+            }
+        },
+        legend: {
+            itemStyle: {
+                font: '9pt Trebuchet MS, Verdana, sans-serif',
+                color: 'black'
+            },
+            itemHoverStyle:{
+                color: 'gray'
+            }
+        }
+    };
+    // Apply the theme
+    Highcharts.setOptions(Highcharts.theme);
 }

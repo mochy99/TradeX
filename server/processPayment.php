@@ -38,7 +38,7 @@ $getTime=time();
 $time = date("His-Ymh",$getTime);
 $transactionID =  $time . 'DP' . $userID;
 $symbol ='DP';
-$quantity = 1;
+$quantity = 1.00;
 if ($data[0] === 'deposit') {
     $balance = $balance + $data[2];
     updateDeposit();
@@ -46,7 +46,7 @@ if ($data[0] === 'deposit') {
     $balance = $balance - $data[2];
     $transactionID =  $time . 'WD' . $userID;
     $symbol ='WD';
-    $quantity = -1;
+    $quantity = -1.00;
     updateBalance();
 } else if ($data[0] === 'buy') {
     $balance = $balance - $data[2] * $data[1];
@@ -67,7 +67,7 @@ if ($data[0] === 'deposit') {
 // Update transaction on database
 $updateTransactionStmt = $conn->prepare("INSERT transactions (transactionID, userID, symbol, transactionType, quantity, price) 
 VALUES (?,?,?,?,?,?)");
-$updateTransactionStmt->bind_param('sissid', $transactionID, $userID, $symbol, $data[0], $quantity, $data[2]);
+$updateTransactionStmt->bind_param('sissdd', $transactionID, $userID, $symbol, $data[0], $quantity, $data[2]);
 $updateTransactionStmt->execute();
 $updateTransactionStmt->close();
 

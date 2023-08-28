@@ -8,8 +8,11 @@
     --button-color-2: rgb(70,195,249);
     --time-options-color: rgba(64, 94, 140, 0.7);
     --time-options-color2: rgba(33, 42, 54, 0.7);
+    --time-options-color3: rgb(22, 20, 30);
+    --time-options-color4: rgb(118,116,128);
     --container-color-1: rgba(45, 85, 139, 0.5);
     --container-color-2: rgba(45, 9, 98, 0.3);
+    
 }
 * {
     box-sizing: border-box;
@@ -82,8 +85,8 @@ body {
 }
 
 .graph {
+    width: 90vh;
     height: 40vh;
-    width: inherit;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -104,17 +107,21 @@ button {
     display: flex;
     justify-content: space-around;
     align-items: center;
-
 }
+
 button.time {
     width: 8vh;
     height: 4vh;
     border: none;
     border-radius: 6px;
-    box-shadow: none;
-    background-image: linear-gradient(135deg, var(--time-options-color), var(--time-options-color));
+    box-shadow: none;   
 }
-
+.clicked {
+    background-image: linear-gradient(135deg, var(--time-options-color4), var(--time-options-color3));
+}
+.unclicked {
+    background-image: linear-gradient(135deg, var(--time-options-color), var(--time-options-color2));
+}
 .myaccount {
     width: 90vw;
     display: flex;
@@ -164,7 +171,7 @@ input {
     padding-left: var(--gap-default);
     border: 2px solid transparent;
     border-radius: 10px;
-    border-image: linear-gradient(90deg, var(--button-color-1), var(--button-color-2)) 1;
+    border-image: linear-gradient(90deg, var(--button-color-1), var(--button-color-2));
     border-image-slice: 1;  
     font-size: 1.2em;
     margin-top: 1vh;
@@ -187,7 +194,7 @@ input:focus {
 .pending {
     background-image: linear-gradient(90deg, var(--time-options-color), var(--container-color-1));
 }
-/*-----Buyr board -------*/
+/*-----Buy board -------*/
 .box2 {
     width: 80vw;
     display: flex;
@@ -195,15 +202,7 @@ input:focus {
     align-items: center;
     gap: var(--gap-default);
 }
-input[type='button'] {
-    padding: 0;
-    border: none;
-    background-image: linear-gradient(90deg, var(--time-options-color), var(--time-options-color2));
-    font-size: 0.8em;
-    font-weight: bold;
-    width: 12vh;
-    height: 4vh;
-}
+
 /*----- Notice board -----*/
 #buy, #notice {
     width: 90vw;   
@@ -260,11 +259,14 @@ input[type='button'] {
     font-size: 1.5em;
 }
 
-
 .bold {
-    color: white;;
     font-size: 1.4em;
     font-weight: bolder;
+}
+
+/*-------Highchart -------*/
+.highcharts-alternate-grid, .highcharts-axis, .highcharts-axis-labels, .highcharts-axis-title {
+    color: white;
 }
 
 @media only screen and (min-width: 413px) {
@@ -280,6 +282,7 @@ input[type='button'] {
         width: 40vw;
     }
     .graph {
+        width: 40vw;
         height: 45vh
     }
     .nav {
