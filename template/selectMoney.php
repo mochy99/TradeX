@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" id ='select-money'>
        
     <div>Select amount</div>
     <input type="text" name="money" id="money">
