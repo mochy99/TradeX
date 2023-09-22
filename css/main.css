@@ -116,28 +116,25 @@ button.time {
     background-image: linear-gradient(135deg, var(--time-options-color), var(--time-options-color));
 }
 
-
-
 .myaccount {
     width: 90vw;
     display: flex;
     flex-direction: column;
+    gap: var(--gap-default);
 }
 
-ul {
+.portfolio {
     width: inherit;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: start;
-    gap: var(--gap-default);
-    list-style: none;
-    
+    gap: 2vh;  
 }
-li {
+.container {
     position: relative;
     width: inherit;
-    height: 15vh;
+    height: 10vh;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
@@ -145,41 +142,38 @@ li {
     padding-top: 10px;
     padding-left: 10px;
     background-image:linear-gradient(90deg, var(--container-color-1), var(--container-color-2));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1vh;
+    margin-bottom: var(--gap-default);
 }
-ul li:first-child {
+.container:first-child {
     margin-top: var(--gap-default);
 }
-ul li:last-child {
+.container:last-child {
     margin-bottom: var(--height-header);
 }
-
-.top {
-    position: absolute;
-    top: 3vh;
-    left: 2vw;
+.box {
+    width: 80vw;
     display: flex;
-    justify-content: center;
     align-items: center;
-    gap: 3px;
+    justify-content: space-evenly;
+
 }
-.middle {
-    position: absolute;
-    top: 6vh;
-    right: 5vw;
+.clicked {
+    background-image: linear-gradient(135deg, var(--time-options-color4), var(--time-options-color3));
 }
-.bot {
-    position: absolute;
-    bottom: 3vh;
-    left: 2vw;
+.unclicked {
+    background-image: linear-gradient(135deg, var(--time-options-color), var(--time-options-color2));
 }
-.date {
-    color: rgba(255, 255, 255, 0.6);
-}
+
 .pos {
-    color: var(--button-color-1);
+    color: var(--button-color-2);
 }
 .neg {
-    color: var(--button-color-2);
+    color: var(--button-color-1);
 }
 .nav{
     height: 7vh;
@@ -202,7 +196,80 @@ ul li:last-child {
 .inactive {
     color: rgba(255, 255, 255, 0.24);
 }
+.hidden {
+    visibility: hidden;
+    display: none;
+}
 
+/*-----Buy board -------*/
+.box2 {
+    width: 80vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--gap-default);
+}
+
+/*----- Notice board -----*/
+#buy, #notice {
+    width: 90vw;   
+    position: fixed;
+    top: 10vh;
+    border-radius: var(--gap-default);
+    padding: var(--gap-default);
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-top: var(--gap-default);
+    gap: 10px;
+}
+#notice {
+    top: 30vh;
+}
+
+#status {
+    font-size: 1.9em;
+}
+#status-icon {
+    font-size: 2.5em;
+    height: min-content;
+}
+#available {
+    font-weight: bold;
+    font-size: 1.2em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+}
+.border-bot {
+    width: 60vw;
+    border-top: 1px var(--time-options-color) dashed;
+    margin-top: 1.5vh;
+    margin-bottom: 2.5vh;
+}
+.dark-font {
+    font-size: 1em;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    gap: var(--gap-default);
+    margin: 1vh;
+}
+#currentBalance {
+    margin-top: 1vh;
+    text-align: center;
+    font-size: 1.5em;
+}
+
+.bold {
+    font-size: 1.4em;
+    font-weight: bolder;
+}
 
 @media only screen and (min-width: 413px) {
     /* For tablet and laptop*/
@@ -210,7 +277,7 @@ ul li:last-child {
         width: 40vw;
         height: 80vh;
     }
-    .selectors, .add {
+    .selectors, .add, .box {
         width: 40vw;
     }
     .graph {
