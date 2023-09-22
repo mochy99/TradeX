@@ -78,15 +78,13 @@ body {
 }
 .figure {
     width: inherit;
-
 }
 .graphic {
     width: inherit;
 }
-
 .graph {
-    width: 90vh;
     height: 40vh;
+    width: inherit;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -102,7 +100,7 @@ button {
     background-image: linear-gradient(135deg, var(--button-color-1), var(--button-color-2));
 }
 .selectors {
-    width: inherit;
+    width: 90vw;
     height: 7vh;
     display: flex;
     justify-content: space-around;
@@ -154,10 +152,6 @@ button.time {
 }
 .neg {
     color: var(--button-color-1);
-}
-.hidden {
-    visibility: hidden;
-    display: none;
 }
 
 .blur {
@@ -263,7 +257,10 @@ input:focus {
     font-size: 1.4em;
     font-weight: bolder;
 }
-
+.hidden {
+    visibility: hidden;
+    display: none;
+}
 /*-------Highchart -------*/
 .highcharts-alternate-grid, .highcharts-axis, .highcharts-axis-labels, .highcharts-axis-title {
     color: white;
@@ -282,8 +279,10 @@ input:focus {
         width: 40vw;
     }
     .graph {
-        width: 40vw;
         height: 45vh
+    }
+    .figure {
+        width: 40vh;
     }
     .nav {
         width: 90vw;
