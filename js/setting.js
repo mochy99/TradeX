@@ -12,14 +12,14 @@ $(document).ready(function() {
         window.location.href = "../setting/withdraw.php";
     });
     $('#logout').click(function() {
-        window.location.href = "login.php";
+        window.location.href = "../signup/login.php";
     });
     $('.profile').click(function() {
-        window.location.href = "main.php";
+        window.location.href = "../main/main.php";
         console.log('hello')
     });
     $('.trend').click(function() {
-        window.location.href = "market.php";
+        window.location.href = "../main/market.php";
     });
     $('.setting').removeClass('inactive');
 
