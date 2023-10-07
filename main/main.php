@@ -25,13 +25,7 @@ include_once "../template/session.php";
                 <div class="graph" id="graph">
                     We could not load the graph at this time. Check back soon.
                 </div>
-                <div class="selectors">
-                    <button class="time day">D</button>
-                    <button class="time month">M</button>
-                    <button class="time quarter">Q</button>
-                    <button class="time year">Y</button>
-                    <button class="time all">All</button>
-                </div>   
+                  
             </section>
 
             <button class="add">Add investment</button>
