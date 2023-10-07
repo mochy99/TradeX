@@ -1,29 +1,126 @@
+let totalQuantity = 0;
+let totalValue = 0;
+let totalCurrentValue = 0;
+let percentChange;
 let timeSeriesDay = [];
 let timeSeriesIntaDay = [];
 let timeSeriesDaily = [];
 let timeSeriesFull = [];
 let timeSeriesMonth = [];
 let timeSeriesYear = [];
+let historyTransactions = [];
 const formattedDateData = [];
 let updatedPrice;
 let sellState = false;
+const symbol = $('#symbol').text();
+const balance = parseFloat($('#currentBalance').text());
+const limit = parseFloat($('#limit').text());
+const quantity = $('#quantity');
+const money = $('#money');
+const errorMoney = $('.errorMoney');
+const errorQuantity = $('.errorQuantity');
+const price = parseFloat($("#price").text().replace("$",""));
+const submit = $('#submit');
+const cancel = $('#cancel');
+const hundredBtn = $('#100');
+const fiveHundredBtn = $('#500');
+const thousandBtn = $('#1000');
+const twoThousandBtn = $('#2000');
+const fiveThousandBtn = $('#5000');
 $(document).ready(function() {
-    const symbol = $('#symbol').text();
-    const balance = parseFloat($('#currentBalance').text());
-    const limit = parseFloat($('#limit').text());
-    const quantity = $('#quantity');
-    const money = $('#money');
-    const errorMoney = $('.errorMoney');
-    const errorQuantity = $('.errorQuantity');
-    const price = parseFloat($("#price").text().replace("$",""));
-    const submit = $('#submit');
-    const cancel = $('#cancel');
-    const hundredBtn = $('#100');
-    const fiveHundredBtn = $('#500');
-    const thousandBtn = $('#1000');
-    const twoThousandBtn = $('#2000');
-    const fiveThousandBtn = $('#5000');
-    
+    //Fetch user inf and history transactions
+    $.ajax({
+        type: "GET",
+        url: "../server/userInf++.php",
+        dataType: "json",
+        success: function(response) {
+            userInf = response[0];
+            userTransactions = response[1];
+            console.log(response)
+            fetchDaily();
+            history(userTransactions);
+
+            // Display balance and asset
+            console.log(totalCurrentValue)
+            console.log(percentChange);
+            $('.quantity').text('Quantity: ' + totalQuantity);
+        },
+        error: function(err) {
+            console.log(err);
+        }
+    })
+    function fetchDaily() {
+    const url = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=" + symbol +"&interval=5min&apikey=Y8XIWI0EEDT64QKU";
+    //const url = '../data/intraday_test.json'; //for testing
+    $.ajax({
+        type: "GET",
+        url: url,
+        dataType: "json", 
+        success: function (data) {
+            timeSeriesIntaDay= data["Time Series (5min)"];
+            let lastTime = new Date().getDay();
+            for (const date in timeSeriesIntaDay) {
+                const entry = timeSeriesIntaDay[date];
+                const day = new Date(date).getDate();
+                if ((lastTime - day) < 1) {
+                    const timestamp = new Date(date).getTime();
+                    const open = parseFloat(entry["1. open"]);
+                    const high = parseFloat(entry["2. high"]);
+                    const low = parseFloat(entry["3. low"]);
+                    const close = parseFloat(entry["4. close"]);
+                    const volume = parseFloat(entry["5. volume"]);
+
+                    formattedDateData.push([timestamp, open, high, low, close, volume]);
+                }    
+            }
+            formattedDateData.sort((a, b) => a[0] - b[0]);
+            console.log(formattedDateData)
+            updatedPrice =formattedDateData[formattedDateData.length -1][2];
+            timeSeriesChart("Time Series",formattedDateData);
+            
+        },
+        error: function () {
+            $("#graph").text("We could not load the graph at this time. Check back soon.");
+        }
+    });
+    }
+
+    // Display history transaction
+    function history(data) {
+        console.log(data)
+        let html = "";
+        for (const transaction of data) {
+            if (transaction && transaction['symbol'] == symbol) {
+                const date = transaction['transactionDate'];
+                const quantity = parseFloat(transaction['quantity']) * -1;
+                const price = parseFloat(transaction['price']);
+                const id = transaction['transactionID'];
+                const value = transaction['value'];
+                totalQuantity += quantity;
+                totalValue += quantity * price;
+                historyTransactions.push([id, date, quantity, price, value]);
+                let content;
+                let color;
+                content = (quantity < 0) ? 'Sell':'Buy';
+                color = (quantity < 0) ? 'neg':'pos';
+                html += '<div class="container">'
+                    + '<h1>' + content + '</h1>'
+                    + '<h3>' + date + '</h3>'
+                    + '<div class="box">' 
+                    + '<div class="' + color + ' value">' + price + '</div>'
+                    + '<div class="' + color + '">'  + quantity + '</div>'
+                    + '</div>'
+                    + '</div>';
+            }
+        }
+        totalQuantity = totalQuantity;
+        totalValue = Math.round(totalValue * 100) / 100;
+        totalCurrentValue = totalQuantity * updatedPrice;
+        percentChange = Math.round(totalCurrentValue / totalValue * 10000) / 100;
+        $('.asset').text("Total value " + totalCurrentValue + ' (' + percentChange + '%)');
+        $('#history').html(html);
+        console.log(historyTransactions);
+    }
     // Handle event when clicking back btn
     $('#back').click(function() {
         window.location.href = "../main/market.php";
@@ -208,38 +305,7 @@ $(document).ready(function() {
         }
     })
 
-    const url = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=" + symbol +"&interval=5min&apikey=Y8XIWI0EEDT64QKU";
-    //const url = '../data/intraday_test.json'; //for testing
-    $.ajax({
-        type: "GET",
-        url: url,
-        dataType: "json", 
-        success: function (data) {
-            timeSeriesIntaDay= data["Time Series (5min)"];
-            let lastTime = new Date().getDay();
-            for (const date in timeSeriesIntaDay) {
-                const entry = timeSeriesIntaDay[date];
-                const day = new Date(date).getDate();
-                if ((lastTime - day) < 1) {
-                    const timestamp = new Date(date).getTime();
-                    const open = parseFloat(entry["1. open"]);
-                    const high = parseFloat(entry["2. high"]);
-                    const low = parseFloat(entry["3. low"]);
-                    const close = parseFloat(entry["4. close"]);
-                    const volume = parseFloat(entry["5. volume"]);
-
-                    formattedDateData.push([timestamp, open, high, low, close, volume]);
-                }    
-            }
-            formattedDateData.sort((a, b) => a[0] - b[0]);
-            updatedPrice =formattedDateData[formattedDateData.length -1][2];
-            timeSeriesChart("Time Series",formattedDateData);
-            
-        },
-        error: function () {
-            $("#graph").text("We could not load the graph at this time. Check back soon.");
-        }
-    });
+    
     
     function requestDailyTimeSeries(title,dataBase) {
         const link = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + symbol + "&outputsize=full&apikey=Y8XIWI0EEDT64QKU";
@@ -284,5 +350,21 @@ $(document).ready(function() {
             }
         });
     }
+
+    
+    $('#backMain').on('click', function() {
+        window.location.href = "../main/main.php";
+    })
+
+    $('#sell').click(function() {    
+        $('.main').addClass('blur');
+        $('#buy').removeClass('hidden');
+        sellState = true;
+        $('#available').addClass('hidden');
+        $('#available-sell').removeClass('hidden');
+        $('#select-money').addClass('hidden');
+        $('#submit').text('Sell');
+    })
+   
     
 })

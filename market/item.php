@@ -5,8 +5,7 @@ include_once "../template/head+.php";
     <script src="../js/helper.js"></script>
     <script src="../js/item.js"></script>
     <link rel="stylesheet" href="../css/item.css">
-    <title><?php echo $_SESSION['symbol']; 
-    ?></title>
+    <title><?php echo $_SESSION['symbol'];?></title>
 </head>
 <body>
     <section class="header">
@@ -15,23 +14,11 @@ include_once "../template/head+.php";
     </section>
     <section class="main">
         <section class="summary">
-            <section class="figure">
-                <h2 id='price'><?php echo $_SESSION["price"]; ?></h2>
-                <h3><?php echo $_SESSION["percentage"]; ?></h3>
+        <section class="figure">
+            <h2 id='price'><?php echo $_SESSION["price"]; ?></h2>
+            <h3><?php echo $_SESSION["percentage"]; ?></h3>
             </section>
-
-            <section class="graphic highcharts-figure">
-                <div class="graph" id ="graph">
-                    
-                </div>
-                <div class="selectors">
-                    <button class="time clicked" id ="day">D</button>
-                    <button class="time unclicked" id ="month">M</button>
-                    <button class="time unclicked"id ="year">Y</button>
-                    <button class="time unclicked"id ="full">All</button>
-                </div>   
-            </section>
-
+                <?php include_once "../template/chart.php"; ?>
             <button class="add" id="add">Buy more</button>
 
         </section>

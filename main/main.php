@@ -2,7 +2,7 @@
 include_once "../template/error.php";
 include_once "../template/session.php";
 ?>
-<?php include_once "../template/head.php"; ?>
+<?php include_once "../template/head+.php"; ?>
     <script src="../js/main.js"></script>
     <link rel="stylesheet" href="../css/main.css">
     <title>Trade Now</title>
@@ -17,12 +17,12 @@ include_once "../template/session.php";
     <section class="main">
         <section class="summary">
             <section class="figure">
-                <h2 class="profit">$0.00</h2>
-                <h3 class="precent">0%</h3>
+                <h2 id="balance">$0.00</h2>
+                <h3 id="asset">0%</h3>
             </section>
 
-            <section class="graphic">
-                <div class="graph">
+            <section class="graphic highcharts-figure">
+                <div class="graph" id="graph">
                     We could not load the graph at this time. Check back soon.
                 </div>
                 <div class="selectors">
@@ -39,18 +39,8 @@ include_once "../template/session.php";
 
         <section class="myaccount">
             <h2>My accounts</h2>
-            <ul>
-                <li>TSLA</li>
-                <li>AAPL</li>
-                <li>VFV</li>
-                <li>AMC</li>
-                <li>AC</li>
-                <li>TSLA</li>
-                <li>AAPL</li>
-                <li>VFV</li>
-                <li>AMC</li>
-
-              </ul>
+            <div  id="portfolio">   
+            </div>    
         </section>
         <section class="blank"></section>
     </section>

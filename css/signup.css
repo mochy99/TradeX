@@ -27,6 +27,7 @@ body {
 .container {
     width: 98vw;
     height: 98vh;
+    max-width: 900px;
     border-radius: var(--border-curve);
     background-color: var(--container-color);
 }

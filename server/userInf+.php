@@ -15,8 +15,7 @@ if ($conn->connect_error) {
 }
 
 // Create prepare and bind
-$stmt = $conn->prepare("SELECT *
-FROM users WHERE email=?");
+$stmt = $conn->prepare("SELECT * FROM users WHERE email=?");
 $stmt->bind_param("s", $email);
 
 // Execute the query
@@ -31,5 +30,4 @@ if ($result->num_rows > 0) {
 
 $stmt->close();
 $conn->close();
-
 ?>

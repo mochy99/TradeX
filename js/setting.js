@@ -16,7 +16,6 @@ $(document).ready(function() {
     });
     $('.profile').click(function() {
         window.location.href = "../main/main.php";
-        console.log('hello')
     });
     $('.trend').click(function() {
         window.location.href = "../main/market.php";

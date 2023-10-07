@@ -23,6 +23,7 @@ body {
 }
 .container {
     width: 98vw;
+    max-width: 900px;
     height: 98vh;
     border-radius: var(--border-curve);
     background-color: var(--container-color);
@@ -47,6 +48,7 @@ h1 {
 }
 .description {
     width: 85vw;
+    max-width: 850px;
     font-size: 2vh;
     text-align: center;
     color: white;
@@ -64,6 +66,7 @@ h1 {
 button {
     height: 7vh;
     width: 85vw;
+    max-width: 750px;
     border-radius: var(--button-curve);
     font-size: 2.5vh;
 }

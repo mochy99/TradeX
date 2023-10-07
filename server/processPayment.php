@@ -41,33 +41,35 @@ $symbol ='DP';
 $quantity = 1.00;
 if ($data[0] === 'deposit') {
     $balance = $balance + $data[2];
+    $value = $data[2];
     updateDeposit();
 } else if ($data[0] === 'withdraw') {
     $balance = $balance - $data[2];
     $transactionID =  $time . 'WD' . $userID;
     $symbol ='WD';
     $quantity = -1.00;
+    $value = -1 * $data[2];
     updateBalance();
 } else if ($data[0] === 'buy') {
-    $balance = $balance - $data[2] * $data[1];
+    $balance = $balance - $data[4];
     $transactionID =  $time . 'BY' . $userID . "-" . $data[3];
     $symbol = $data[3];
-    $quantity = floatval(-1.00 * $data[1]);
+    $quantity = -1 * $data[1];
+    $value = -1 * $data[4];
     updateBalance();
 } else {
-    $balance = $balance + $data[2] * $data[1];
+    $balance = $balance + $data[4];
     $transactionID =  $time . 'SL' . $userID . "-" . $data[3];
     $symbol = $data[3];
     $quantity = $data[1];
+    $value = $data[4];
     updateBalance();
 }
 
-
-
 // Update transaction on database
-$updateTransactionStmt = $conn->prepare("INSERT transactions (transactionID, userID, symbol, transactionType, quantity, price) 
-VALUES (?,?,?,?,?,?)");
-$updateTransactionStmt->bind_param('sissdd', $transactionID, $userID, $symbol, $data[0], $quantity, $data[2]);
+$updateTransactionStmt = $conn->prepare("INSERT transactionCopy (transactionID, userID, symbol, transactionType, quantity, price, value) 
+VALUES (?,?,?,?,?,?,?)");
+$updateTransactionStmt->bind_param('sissddd', $transactionID, $userID, $symbol, $data[0], $quantity, $data[2], $value);
 $updateTransactionStmt->execute();
 $updateTransactionStmt->close();
 
@@ -102,10 +104,7 @@ function updateBalance() {
     $updateStmt->bind_param("ds", $balance, $email);
     $updateStmt->execute();
     $updateStmt->close();
-        
-    echo $response = $transactionID . ',' . $balance . ',' , $data[1];
-
-    
+    echo $response = $transactionID . ',' . $balance . ',' , $data[1];   
 }
 
 
