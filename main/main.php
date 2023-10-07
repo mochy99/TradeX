@@ -28,12 +28,12 @@ include_once "../template/session.php";
                   
             </section>
 
-            <button class="add">Add investment</button>
+            <button id="add">Add investment</button>
         </section>
 
         <section class="myaccount">
             <h2>My accounts</h2>
-            <div  id="portfolio">   
+            <div  id="portfolio">
             </div>    
         </section>
         <section class="blank"></section>
