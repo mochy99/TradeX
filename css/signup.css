@@ -72,6 +72,7 @@ label[for="email"] {
 input {
     height: 8vh;
     width: 85vw;
+    max-width: 850px;
     font-size: 2vh;
     border-radius: var(--button-curve);
     background-color: var(--box-color);
@@ -93,16 +94,19 @@ input::placeholder {
     font-size: 0.75em;
     height: 1vh; 
     width: 85vw;
+    max-width: 850px;
 }
 .inf {
     font-size: 0.75em;
     color: var(--dark-color-2);
-    text-align: justify;
+    text-align: center;
     width: 85vw;
+    max-width: 850px;
 }
 input[type=submit] {
     height: 7vh;
     width: 85vw;
+    max-width: 850px;
     border-radius: var(--button-curve);
     font-size: 2vh;
     font-weight: bold;
