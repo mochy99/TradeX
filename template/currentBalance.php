@@ -1,4 +1,4 @@
-<div id="available">
+<div id="available" class="available">
     <div class="border-bot"></div>
     <h2>My balance</h2>
     <span id="currentBalance"><?php echo $user['balance']; ?></span>
