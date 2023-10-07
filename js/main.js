@@ -19,8 +19,7 @@ $(document).ready(function() {
         success: function(response) {
             userInf = response[0];
             userTransactions = response[1];
-            console.log(!userTransactions);
-            if (!userTransactions) {
+            if (userTransactions) {
                 portfolio(userTransactions);
                 dashBoard("Dash board", dataGraph);
             } else {
@@ -29,8 +28,8 @@ $(document).ready(function() {
             
             
             // Display balance and asset
-            $('#balance').text("Your available balance " + userInf.balance);
-            $('#asset').text(asset.toString()) ;
+            $('#balance').text("Deposit: $" + userInf.balance);
+            $('#asset').text("Total: $" + asset.toString()) ;
             
             
         },
@@ -41,16 +40,52 @@ $(document).ready(function() {
     
     // Function draw the chart
     function dashBoard(title,dataBase) {
+        const startColor = [236,233,254];
+        const endColor = [140, 92, 247];
+        const numSteps = dataBase.length;
+
+        const stepSize = [
+            (endColor[0] - startColor[0]) / numSteps,
+            (endColor[1] - startColor[1]) / numSteps,
+            (endColor[2] - startColor[2]) / numSteps
+        ];
+
+        const intermediateColors = [];
+
+        for (let i = 0; i < numSteps; i++) {
+            const r = Math.round(startColor[0] + stepSize[0] * i);
+            const g = Math.round(startColor[1] + stepSize[1] * i);
+            const b = Math.round(startColor[2] + stepSize[2] * i);
+            intermediateColors.push(`rgb(${r},${g},${b})`);
+        }
+        
         Highcharts.chart('graph', {
             chart: {
                 plotBackgroundColor: null,
                 plotBorderWidth: null,
                 plotShadow: false,
-                type: 'pie'
+                type: 'pie',
+                backgroundColor: "transparent",
+                
+            },
+            exporting: {
+                buttons: {
+                    contextButton: {
+                        enabled: false
+                    }
+                } 
             },
             title: {
                 text: title,
-                align: 'center'
+                align: 'center',
+                style: {
+                    color: '#ffffff'
+                } 
+            },
+            legend: {
+                itemStyle: {
+                    color: '#ffffff'
+                }
             },
             tooltip: {
                 pointFormat: '{series.name}: <b>${point.percentage:.1f}</b>'
@@ -65,16 +100,21 @@ $(document).ready(function() {
                     allowPointSelect: true,
                     cursor: 'pointer',
                     dataLabels: {
-                        enabled: false
+                        enabled: false, 
                     },
-                    showInLegend: true
+                    borderColor: "transparent",
+                    showInLegend: true,
+                    colors: intermediateColors
                 }
             },
             series: [{
                 name: 'Stock',
                 colorByPoint: true,
                 data: dataBase
-            }]
+            }],
+            credits: {
+                enabled: false 
+            },
         });
         
         
@@ -96,8 +136,6 @@ $(document).ready(function() {
                     filteredData[symbol][0] += quantity;
                     filteredData[symbol][2] += value ;
                 }
-               
-                console.log(filteredData);
             }
             
         }
@@ -105,15 +143,12 @@ $(document).ready(function() {
 
         let html = "";
         for (const stock in filteredData) {
-            console.log(filteredData[stock][2]);
             let value = filteredData[stock][2];
-            console.log(value);
             let quantity = filteredData[stock][0];
             if (value && stock !=="WD" && stock !=='DP') {
                 value = value * -1;
                 quantity = quantity * -1;
                 asset += value;
-                console.log(asset);
                 html += '<div class="container" id="' + stock + '">'
                     + '<h3>' + stock + '</h3>'
                     + '<div class="box">' 
@@ -152,20 +187,9 @@ $(document).ready(function() {
     
 
     // Function for add investment btn
-    $('#id').on('click', function () {
+    $('#add').on('click', function () {
         window.location.href = "market.php";
+        console.log('hi')
     })
-
-    const link = "https://www.alphavantage.co/query?function=LISTING_STATUS&apikey=FYS7XBGA2EO90BBJ";
-    $.ajax({
-        type: "GET",
-        url: link, 
-        dataType: "json",
-        success: function (response) {
-            console.log(response)
-        },
-        error: function () {
-            console.log("Error fetching data from loadingListing.php");
-        }
-    });
+    // ('.highcharts-background').css('background-image', 'linear-gradient(175deg, rgba(45, 85, 139, 0.5), rgba(45, 9, 98, 0.3))');
 });
