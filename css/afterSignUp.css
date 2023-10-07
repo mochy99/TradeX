@@ -27,6 +27,7 @@ body {
 .container {
     width: 98vw;
     height: 98vh;
+    max-width: 900px;
     border-radius: var(--border-curve);
     background-color: var(--container-color);
 }
@@ -70,6 +71,7 @@ label[for="email"] {
 input {
     height: 8vh;
     width: 85vw;
+    max-width: 850px;
     font-size: 2vh;
     border-radius: var(--button-curve);
     background-color: var(--box-color);
@@ -87,6 +89,7 @@ input::placeholder {
 }
 .box2 {
     width: 85vw;
+    max-width: 850px;
     display: flex;
     justify-content: start;
     margin-top: calc(var(--gap-default) / 2);
@@ -105,6 +108,7 @@ label[for=show] {
 }
 span {
     width: 85vw;
+    max-width: 850px;
     font-size: 0.75em;
     color: var(--button-color-1);
     text-align: left;
@@ -123,6 +127,7 @@ span {
 input[type=submit] {
     height: 7vh;
     width: 85vw;
+    max-width: 850px;
     margin-top: var(--gap-default);
     border-radius: var(--button-curve);
     font-size: 2vh;
