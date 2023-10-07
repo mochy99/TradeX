@@ -76,15 +76,11 @@ body {
     align-items: center;
     gap: var(--gap-default);
 }
-.figure {
-    width: inherit;
-}
-.graphic {
-    width: inherit;
+.figure, .graphic, .graph, .myaccount, button {
+    width: 90vw;
 }
 .graph {
     height: 40vh;
-    width: inherit;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -92,7 +88,6 @@ body {
     background-image:linear-gradient(175deg, var(--container-color-1), var(--container-color-2));
 }
 button {
-    width: 90vw;
     height: 6vh;
     border: none;
     border-radius: 100px;
@@ -121,7 +116,6 @@ button.time {
     background-image: linear-gradient(135deg, var(--time-options-color), var(--time-options-color2));
 }
 .myaccount {
-    width: 90vw;
     display: flex;
     flex-direction: column;
 }
@@ -174,6 +168,12 @@ input {
 input:focus {
     outline-style: none;
 }
+input[type='button'] {
+    width: 12vw;
+    height: 4vh;
+    font-size: 1.5vh;
+    padding: 0;
+}
 .box {
     width: 70vw;
     display: flex;
@@ -223,7 +223,7 @@ input:focus {
     font-size: 2.5em;
     height: min-content;
 }
-#available {
+.available {
     font-weight: bold;
     font-size: 1.2em;
     display: flex;
@@ -266,24 +266,22 @@ input:focus {
     color: white;
 }
 
-@media only screen and (min-width: 413px) {
+@media only screen and (min-width: 769px) {
     /* For tablet and laptop*/
     .main {
         justify-content: center;
     }
-    .summary, .myaccount {
+    .figure, .graphic, .graph, .myaccount, button, .selectors, .add, .box {
         width: 40vw;
+    }
+    .summary, .myaccount {
         height: 80vh;
     }
-    .selectors, .add, .box {
-        width: 40vw;
-    }
+
     .graph {
         height: 45vh
     }
-    .figure {
-        width: 40vh;
-    }
+    
     .nav {
         width: 90vw;
     }
