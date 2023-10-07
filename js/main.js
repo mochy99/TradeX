@@ -64,7 +64,7 @@ $(document).ready(function() {
                 plotBackgroundColor: null,
                 plotBorderWidth: null,
                 plotShadow: false,
-                type: 'pie',
+                type: 'donut',
                 backgroundColor: "transparent",
                 
             },

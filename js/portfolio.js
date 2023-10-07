@@ -1,33 +1,33 @@
-let totalQuantity = 0;
-let totalValue = 0;
-let totalCurrentValue = 0;
-let percentChange;
-let timeSeriesDay = [];
-let timeSeriesIntaDay = [];
-let timeSeriesDaily = [];
-let timeSeriesFull = [];
-let timeSeriesMonth = [];
-let timeSeriesYear = [];
-let historyTransactions = [];
-const formattedDateData = [];
-let updatedPrice;
-let sellState = false;
-const symbol = $('#symbol').text();
-const balance = parseFloat($('#currentBalance').text());
-const limit = parseFloat($('#limit').text());
-const quantity = $('#quantity');
-const money = $('#money');
-const errorMoney = $('.errorMoney');
-const errorQuantity = $('.errorQuantity');
-const price = parseFloat($("#price").text().replace("$",""));
-const submit = $('#submit');
-const cancel = $('#cancel');
-const hundredBtn = $('#100');
-const fiveHundredBtn = $('#500');
-const thousandBtn = $('#1000');
-const twoThousandBtn = $('#2000');
-const fiveThousandBtn = $('#5000');
 $(document).ready(function() {
+    let totalQuantity = 0;
+    let totalValue = 0;
+    let totalCurrentValue = 0;
+    let percentChange;
+    let timeSeriesDay = [];
+    let timeSeriesIntaDay = [];
+    let timeSeriesDaily = [];
+    let timeSeriesFull = [];
+    let timeSeriesMonth = [];
+    let timeSeriesYear = [];
+    let historyTransactions = [];
+    const formattedDateData = [];
+    let updatedPrice;
+    let sellState = false;
+    const symbol = $('#symbol').text();
+    const balance = parseFloat($('#currentBalance').text());
+    const limit = parseFloat($('#limit').text());
+    const quantity = $('#quantity');
+    const money = $('#money');
+    const errorMoney = $('.errorMoney');
+    const errorQuantity = $('.errorQuantity');
+    const price = parseFloat($("#price").text().replace("$",""));
+    const submit = $('#submit');
+    const cancel = $('#cancel');
+    const hundredBtn = $('#100');
+    const fiveHundredBtn = $('#500');
+    const thousandBtn = $('#1000');
+    const twoThousandBtn = $('#2000');
+    const fiveThousandBtn = $('#5000');
     //Fetch user inf and history transactions
     $.ajax({
         type: "GET",
@@ -36,14 +36,7 @@ $(document).ready(function() {
         success: function(response) {
             userInf = response[0];
             userTransactions = response[1];
-            console.log(response)
             fetchDaily();
-            history(userTransactions);
-
-            // Display balance and asset
-            console.log(totalCurrentValue)
-            console.log(percentChange);
-            $('.quantity').text('Quantity: ' + totalQuantity);
         },
         error: function(err) {
             console.log(err);
@@ -57,27 +50,27 @@ $(document).ready(function() {
         url: url,
         dataType: "json", 
         success: function (data) {
-            timeSeriesIntaDay= data["Time Series (5min)"];
-            let lastTime = new Date().getDay();
-            for (const date in timeSeriesIntaDay) {
-                const entry = timeSeriesIntaDay[date];
-                const day = new Date(date).getDate();
-                if ((lastTime - day) < 1) {
-                    const timestamp = new Date(date).getTime();
-                    const open = parseFloat(entry["1. open"]);
-                    const high = parseFloat(entry["2. high"]);
-                    const low = parseFloat(entry["3. low"]);
-                    const close = parseFloat(entry["4. close"]);
-                    const volume = parseFloat(entry["5. volume"]);
+            formatDaily(data);
+            history(userTransactions);
 
-                    formattedDateData.push([timestamp, open, high, low, close, volume]);
-                }    
-            }
-            formattedDateData.sort((a, b) => a[0] - b[0]);
-            console.log(formattedDateData)
-            updatedPrice =formattedDateData[formattedDateData.length -1][2];
-            timeSeriesChart("Time Series",formattedDateData);
-            
+            // Handle event when click buy btn
+            $('#add').click(function() {    
+                $('.main').addClass('blur');
+                $('#buy').removeClass('hidden');
+            })
+
+            // Handle event when click sell btn
+            $('#sell').click(function() {    
+                $('.main').addClass('blur');
+                $('#buy').removeClass('hidden');
+                sellState = true;
+                $('#available').addClass('hidden');
+                $('#available-sell').removeClass('hidden');
+                // // $('#select-money').addClass('hidden');
+                $('#submit').text('Sell');
+            })
+            // Display balance and asset
+            $('.quantity').text('Quantity: ' + totalQuantity);
         },
         error: function () {
             $("#graph").text("We could not load the graph at this time. Check back soon.");
@@ -85,10 +78,33 @@ $(document).ready(function() {
     });
     }
 
+    // Format data Daily 
+    function formatDaily (data) {
+        console.log(data)
+        timeSeriesIntaDay= data["Time Series (5min)"];
+        let lastTime = new Date().getDay();
+        for (const date in timeSeriesIntaDay) {
+            const entry = timeSeriesIntaDay[date];
+            const day = new Date(date).getDate();
+            if ((lastTime - day) < 1) {
+                const timestamp = new Date(date).getTime();
+                const open = parseFloat(entry["1. open"]);
+                const high = parseFloat(entry["2. high"]);
+                const low = parseFloat(entry["3. low"]);
+                const close = parseFloat(entry["4. close"]);
+                const volume = parseFloat(entry["5. volume"]);
+
+                formattedDateData.push([timestamp, open, high, low, close, volume]);
+            }    
+        }
+        formattedDateData.sort((a, b) => a[0] - b[0]);
+        updatedPrice =formattedDateData[formattedDateData.length -1][2];
+        timeSeriesChart("Time Series",formattedDateData);
+    }
     // Display history transaction
     function history(data) {
-        console.log(data)
         let html = "";
+
         for (const transaction of data) {
             if (transaction && transaction['symbol'] == symbol) {
                 const date = transaction['transactionDate'];
@@ -96,6 +112,7 @@ $(document).ready(function() {
                 const price = parseFloat(transaction['price']);
                 const id = transaction['transactionID'];
                 const value = transaction['value'];
+
                 totalQuantity += quantity;
                 totalValue += quantity * price;
                 historyTransactions.push([id, date, quantity, price, value]);
@@ -113,24 +130,22 @@ $(document).ready(function() {
                     + '</div>';
             }
         }
+
         totalQuantity = totalQuantity;
         totalValue = Math.round(totalValue * 100) / 100;
+        console.log(updatedPrice)
         totalCurrentValue = totalQuantity * updatedPrice;
         percentChange = Math.round(totalCurrentValue / totalValue * 10000) / 100;
         $('.asset').text("Total value " + totalCurrentValue + ' (' + percentChange + '%)');
         $('#history').html(html);
-        console.log(historyTransactions);
+
     }
     // Handle event when clicking back btn
     $('#back').click(function() {
         window.location.href = "../main/market.php";
     })
     
-    // Handle event when click buy btn
-    $('#add').click(function() {    
-        $('.main').addClass('blur');
-        $('#buy').removeClass('hidden');
-    })
+    
     // Change css class of box money
     $('#money').parent().removeClass('container');
     // Handle the amount money button.
@@ -164,7 +179,7 @@ $(document).ready(function() {
     // Handle blur in money input
     money.on('keyup', function() {
         errorMoney.text("");
-        if (money.val() && isFloat(money.val()) &&  money.val() <= balance ) {
+        if (money.val() && isFloat(money.val()) &&  ((sellState && money.val() <= balance) || (money.val() <= totalValue)) ) {
             calQuantity();
         } else {
             quantity.val('');
@@ -191,28 +206,14 @@ $(document).ready(function() {
         console.log(balance);
         console.log(sellState);
         if ($(this).val() && isFloat($(this).val()) ) { 
-            if (sellState) {
-                if ($(this).val() <= totalQuantity) {
-                    errorQuantity.text("");
-                    submit.removeClass('pending');
-                } else {
-                    money.val("");
-                    errorQuantity.text("Please input valid quantity");
-                     submit.addClass('pending');
-                }
+            if ((sellState && $(this).val() <= totalQuantity) || money.val() <= balance) {
+                errorQuantity.text("");
+                submit.removeClass('pending');
             } else {
-                if (moneyVal <= balance) {
-                    errorQuantity.text("");
-                    submit.removeClass('pending');
-                } else {
-                    money.val("");
-                    errorQuantity.text("Please input valid quantity");
-                     submit.addClass('pending');
-                }
-                money.val(moneyVal.toFixed(2) > 0 ? moneyVal.toFixed(2) : "");
-            }  
-            
-            
+                money.val("");
+                errorQuantity.text("Please input valid quantity");
+                    submit.addClass('pending');
+            }   
         } else {
             money.val("");
             errorQuantity.text("Please input valid quantity");
@@ -223,8 +224,8 @@ $(document).ready(function() {
     // Check validation of inputs
     submit.on('click', function() {
         if(!isNaN(money.val()) && !isNaN(quantity.val())
-        && ((!sellState && (money.val()) && (quantity.val()))
-        || (sellState && quantity.val()))) {    
+        && ((!sellState && (money.val() <= balance) && quantity.val())
+        || (sellState && quantity.val() && quantity.val() <= totalQuantity))) {    
             let state = !sellState ? 'buy' : 'sell'; 
             dataInf = [state, parseFloat(quantity.val()), updatedPrice, symbol, parseFloat(quantity.val() * updatedPrice)];
             console.log(dataInf);
@@ -255,8 +256,16 @@ $(document).ready(function() {
                 }
             }); 
         } else {
-            checkBlank(money,errorMoney);
-            checkBlank(quantity, errorQuantity);
+            if (!sellState && (money.val() > balance)) {
+                console.log("Exceed the balance!");
+                errorMoney.text("Exceed the balance!");
+            } else if (sellState && quantity.val > totalQuantity) {
+                errorQuantity.text("Exceed the current quantity");
+                console.log("Exceed the current!");
+            } else {
+                checkBlank(money,errorMoney);
+                checkBlank(quantity, errorQuantity);
+            }
         }
         
     })
@@ -265,6 +274,10 @@ $(document).ready(function() {
     cancel.on('click', function() {
         $('.main').removeClass('blur');
         $('#buy').addClass('hidden');
+        money.val("");
+        quantity.val("");
+        errorMoney.text("");
+        errorQuantity.text("");
     })
     // Function close btn
     $('.close').click(function() {
@@ -280,14 +293,15 @@ $(document).ready(function() {
         
     })
 
+    $('#day').on('click', function() {    
+        timeSeriesChart("Time Series",formattedDateData);  
+    })
     $('#month').on('click', function() {    
         if (timeSeriesMonth) {
             requestDailyTimeSeries("Monthly Time Series",timeSeriesMonth);            
         } else {
             timeSeriesChart("Monthly Time Series",timeSeriesMonth);
-        }
-        
-        console.log(timeSeriesMonth);        
+        }    
     })
     $('#year').on('click', function() {
         if (timeSeriesYear) {
@@ -356,15 +370,7 @@ $(document).ready(function() {
         window.location.href = "../main/main.php";
     })
 
-    $('#sell').click(function() {    
-        $('.main').addClass('blur');
-        $('#buy').removeClass('hidden');
-        sellState = true;
-        $('#available').addClass('hidden');
-        $('#available-sell').removeClass('hidden');
-        $('#select-money').addClass('hidden');
-        $('#submit').text('Sell');
-    })
+    
    
     
 })
