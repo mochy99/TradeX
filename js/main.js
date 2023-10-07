@@ -19,14 +19,19 @@ $(document).ready(function() {
         success: function(response) {
             userInf = response[0];
             userTransactions = response[1];
-            console.log(response);
-            portfolio(userTransactions);
-            dashBoard("Dash board", dataGraph);
+            console.log(!userTransactions);
+            if (!userTransactions) {
+                portfolio(userTransactions);
+                dashBoard("Dash board", dataGraph);
+            } else {
+                $('#portfolio').text('No history transaction');
+            }
+            
             
             // Display balance and asset
             $('#balance').text("Your available balance " + userInf.balance);
             $('#asset').text(asset.toString()) ;
-            console.log(dataGraph);
+            
             
         },
         error: function(err) {
@@ -143,5 +148,24 @@ $(document).ready(function() {
                 console.log("Error fetching data from item.php");
             }
         });
-    });  
+    }); 
+    
+
+    // Function for add investment btn
+    $('#id').on('click', function () {
+        window.location.href = "market.php";
+    })
+
+    const link = "https://www.alphavantage.co/query?function=LISTING_STATUS&apikey=FYS7XBGA2EO90BBJ";
+    $.ajax({
+        type: "GET",
+        url: link, 
+        dataType: "json",
+        success: function (response) {
+            console.log(response)
+        },
+        error: function () {
+            console.log("Error fetching data from loadingListing.php");
+        }
+    });
 });
