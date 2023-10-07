@@ -75,7 +75,7 @@ h1 {
     gap: var(--gap-default);
 }
 .figure {
-    width: inherit;
+    width: 90vw;
 
 }
 .graphic {
@@ -93,6 +93,7 @@ h1 {
 }
 button {
     width: 90vw;
+    max-width: 600px;
     height: 6vh;
     border: none;
     border-radius: 100px;
@@ -271,7 +272,7 @@ button.time {
     font-weight: bolder;
 }
 
-@media only screen and (min-width: 413px) {
+@media only screen and (min-width: 769px) {
     /* For tablet and laptop*/
     .summary, .myaccount, .blank {
         width: 40vw;
@@ -286,8 +287,7 @@ button.time {
     .nav {
         width: 90vw;
     }
-    .add {
-        height: 4vh;
+    button {
         width: 25vw;
     }
     .li {
