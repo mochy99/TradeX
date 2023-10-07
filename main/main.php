@@ -18,7 +18,6 @@ include_once "../template/session.php";
         <section class="summary">
             <section class="figure">
                 <h2 id="balance">$0.00</h2>
-                <h3 id="asset">0%</h3>
             </section>
 
             <section class="graphic highcharts-figure">
@@ -33,6 +32,7 @@ include_once "../template/session.php";
 
         <section class="myaccount">
             <h2>My accounts</h2>
+            <h2 id="asset">0%</h2>
             <div  id="portfolio">
             </div>    
         </section>
