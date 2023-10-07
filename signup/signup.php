@@ -27,9 +27,7 @@ session_start();
                 ?>
             </span>
 
-            <span class="inf">Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-                Assumenda cupiditate excepturi explicabo enim sunt aliquam atque, corporis, 
-                doloribus nam!</span>
+            <span class="inf">This is a simulation application where you can experiment with a fictitious email and without providing real credit information to understand how the app functions.</span>
             <input type="submit" value="Continue" class="button">    
         </form>
     </div>
