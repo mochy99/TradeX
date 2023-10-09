@@ -13,6 +13,7 @@ $(document).ready(function() {
     });
     $('#logout').click(function() {
         window.location.href = "../signup/login.php";
+        localStorage.clear();
     });
     $('.profile').click(function() {
         window.location.href = "../main/main.php";
