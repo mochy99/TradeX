@@ -77,33 +77,56 @@ function timeSeriesChart(title,data) {
     Highcharts.chart("graph", {
         chart: {
             zoomType: 'x',
-            backgroundColor: "rgba(45, 85, 139, 0.5)"
+            backgroundColor: "transparent"
         },
         title: {
             text: title,
             align: 'center',
+            style: {
+                color: "white"
+            }
+        },
+        legend: {
+            itemStyle: {
+                color: '#ffffff'
+            }
         },
         xAxis: {
-            type: 'datetime'
+            type: 'datetime',
+            gridLineWidth: 0, 
+            labels: {
+                style: {
+                    color: 'white' 
+                }
+            }
         },
+
         yAxis: {
             title: {
-                text: 'Price'
+                text: 'Price', 
+                style: {
+                    color: 'white' 
+                }
             }, 
+            gridLineWidth: 0, 
+            lineColor: {
+                linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
+                stops: [
+                    [0, 'white'], // Start color
+                    [1, 'blue']   // End color
+                ]
+            },
+            labels: {
+                style: {
+                    color: 'white' 
+                }
+            },
+
         },
         plotOptions: {
             area: {
                 fillColor: {
-                    linearGradient: {
-                        x1: 0,
-                        y1: 0,
-                        x2: 0,
-                        y2: 1
-                    },
-                    stops: [
-                        [0, Highcharts.getOptions().colors[0]],
-                        [1, Highcharts.color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
-                    ]
+                    color: "white"
                 },
                 marker: {
                     radius: 2
@@ -114,14 +137,26 @@ function timeSeriesChart(title,data) {
                         lineWidth: 1
                     }
                 },
-                series: {
-                    color: '#FFFFFF' // Set your desired color here
-                },
                 threshold: null
             }
         },
         series: [{
             name: 'Stock Price',
+            type : "area",
+            color: {
+                linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
+                stops: [
+                    [0, 'rgb(220, 79, 248)'], 
+                    [1, 'rgb(70, 195, 249)'] 
+                ]
+            },
+            fillColor: {
+                linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
+                stops: [
+                    [0, 'rgba(220, 79, 248, 0.0)'], // Start color with opacity
+                    [1, 'rgba(70, 195, 249, 0.0)']  // End color with opacity
+                ]
+            },
             data: data,
             tooltip: {
                 valueDecimals: 2,
@@ -130,7 +165,17 @@ function timeSeriesChart(title,data) {
                 borderRadius: 10,
                 borderWidth: 3
             }
-        }],    
+        }], 
+        credits: {
+            enabled: false 
+        },
+        exporting: {
+            buttons: {
+                contextButton: {
+                    enabled: false
+                }
+            } 
+        },   
     });
     
 }
