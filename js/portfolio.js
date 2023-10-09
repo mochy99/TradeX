@@ -16,17 +16,12 @@ $(document).ready(function() {
     const balance = parseFloat($('#currentBalance').text());
     const quantity = $('#quantity');
     const money = $('#money');
-    const errorMoney = $('.errorMoney');
+    const errorMoney = $('.error-money');
     const errorQuantity = $('.errorQuantity');
     const submit = $('#submit');
     const cancel = $('#cancel');
-    const hundredBtn = $('#100');
-    const fiveHundredBtn = $('#500');
-    const thousandBtn = $('#1000');
-    const twoThousandBtn = $('#2000');
-    const fiveThousandBtn = $('#5000');
     const keyName = "Full" + symbol;
-    const today = new Date().getDate();
+    const today = new Date().getTime();
 
     // Fetch user inf and history transactions
     $.ajax({
@@ -46,9 +41,8 @@ $(document).ready(function() {
     // Fetch database for intraday
     function fetchDaily() {
         const oneHourInMilliseconds = 1000 * 60;
-        const currentTime = new Date().getTime();
     
-        if (!localStorage.getItem(symbol) || currentTime - JSON.parse(localStorage.getItem(symbol)).timestamp > oneHourInMilliseconds) {
+        if (!localStorage.getItem(symbol) || today - JSON.parse(localStorage.getItem(symbol)).timestamp > oneHourInMilliseconds) {
             const url = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=" + symbol + "&interval=5min&apikey=Y8XIWI0EEDT64QKU";
 
             $.ajax({
@@ -56,7 +50,7 @@ $(document).ready(function() {
                 url: url,
                 dataType: "json",
                 success: function (data) {
-                    const newData = { source: data, timestamp: currentTime };
+                    const newData = { source: data, timestamp: today };
                     localStorage.setItem(symbol, JSON.stringify(newData));
                     formatDaily(data);
                     history(userTransactions);
@@ -80,6 +74,9 @@ $(document).ready(function() {
             $('#add').click(function () {
                 $('.main').addClass('blur');
                 $('#buy').removeClass('hidden');
+                $('#available').removeClass('hidden');
+                $('#available-sell').addClass('hidden');
+                submit.text('Buy');
             });
         
             // Handle event when clicking the "sell" button
@@ -89,7 +86,7 @@ $(document).ready(function() {
                 sellState = true;
                 $('#available').addClass('hidden');
                 $('#available-sell').removeClass('hidden');
-                $('#submit').text('Sell');
+                submit.text('Sell');
             });
         }
         
@@ -131,7 +128,7 @@ $(document).ready(function() {
                 const quantity = parseFloat(transaction['quantity']) * -1;
                 const price = parseFloat(transaction['price']);
                 const id = transaction['transactionID'];
-                const value = transaction['value'];
+                const value = transaction['value'] * -1;
 
                 totalQuantity += quantity;
                 totalValue += quantity * price;
@@ -141,11 +138,23 @@ $(document).ready(function() {
                 content = (quantity < 0) ? 'Sell':'Buy';
                 color = (quantity < 0) ? 'neg':'pos';
                 html += '<div class="container">'
+                    + '<div class="box">' 
                     + '<h1>' + content + '</h1>'
                     + '<h3>' + date + '</h3>'
+                    + '</div>'
                     + '<div class="box">' 
-                    + '<div class="' + color + ' value">' + price + '</div>'
+                    + '<div>'
+                    + '<div>Quantity</div>'
                     + '<div class="' + color + '">'  + quantity + '</div>'
+                    + '</div>'
+                    + '<div>'
+                    + '<div>Price</div>'
+                    + '<div class="' + color + ' price">' + price + '</div>'
+                    + '</div>'
+                    + '<div>'
+                    + '<div>Total</div>'
+                    + '<div class="' + color + ' value">' + '$' + value + '</div>'
+                    + '</div>'
                     + '</div>'
                     + '</div>';
             }
@@ -153,10 +162,13 @@ $(document).ready(function() {
 
         totalQuantity = totalQuantity;
         totalValue = Math.round(totalValue * 100) / 100;
-        totalCurrentValue = totalQuantity * updatedPrice;
-        percentChange = Math.round(totalCurrentValue / totalValue * 10000) / 100;
-
-        $('.asset').text("Total value " + totalCurrentValue + ' (' + percentChange + '%)');
+        totalCurrentValue = Math.round(totalQuantity * updatedPrice * 100) / 100;
+        percentChange =  Math.round((totalCurrentValue / totalValue - 1) * 100) / 100;
+        let percentHtml = (percentChange > 0) ? 
+            "<span class='pos'>" + percentChange + "%</span>" :
+            "<span class='neg'>" + percentChange + "%</span>"
+        
+        $('.asset').html("$" + totalCurrentValue + ' (' + percentHtml + ')');
         $('#history').html(html);
 
     }
@@ -169,41 +181,37 @@ $(document).ready(function() {
     // Change css class of box money
     $('#money').parent().removeClass('container');
     // Handle the amount money button.
-    hundredBtn.click(function(){
-        money.val(hundredBtn.val());
-        calQuantity();
-        errorMoney.text('');
-    })
-    fiveHundredBtn.click(function(){
-        money.val(fiveHundredBtn.val());
-        calQuantity();
-        errorMoney.text('');
-    })
-    thousandBtn.click(function(){
-        money.val(thousandBtn.val());
-        calQuantity();
-        errorMoney.text('');
-    })
-    twoThousandBtn.click(function(){
-        money.val(twoThousandBtn.val());
-        calQuantity();
-        errorMoney.text('');
-    })
-    fiveThousandBtn.click(function(){
-        money.val(fiveThousandBtn.val());
-        calQuantity();
-        errorMoney.text('');
+    $('.select-money').on('click', function() {
+        let value = parseFloat($(this).attr('value'));
+        console.log(value);
+        console.log(sellState);
+        console.log(totalValue);
+        console.log(balance)
+        if ((sellState && value <= totalValue) || (!sellState && value <= balance)) {
+            money.val(value);
+            calQuantity();
+            
+            submit.removeClass('pending');
+            errorMoney.text("");
+            errorQuantity.text("");
+        } else {
+            money.val('');
+            quantity.val('');
+            errorMoney.text("Invalid amount of money");
+            submit.addClass('pending');
+            console.log('false')
+        } 
     })
     
 
     // Handle blur in money input
     money.on('keyup', function() {
         errorMoney.text("");
-        if (money.val() && isFloat(money.val()) &&  ((sellState && money.val() <= balance) || (money.val() <= totalValue)) ) {
+        if (money.val() && isFloat(money.val()) &&  ((sellState && money.val() <= totalValue) || (!sellState && money.val() <= balance)) ) {
             calQuantity();
         } else {
             quantity.val('');
-            errorMoney.text("Please input valid amount of money");
+            errorMoney.text("Invalid amount of money");
             submit.addClass('pending');
         }
     });
@@ -220,20 +228,16 @@ $(document).ready(function() {
     quantity.on('keyup', function() {
         console.log('hi');
         errorQuantity.text("");
-        let moneyVal = $(this).val() * updatedPrice;
-
-        if ($(this).val() && isFloat($(this).val()) ) { 
-            if ((sellState && $(this).val() <= totalQuantity) || moneyVal <= balance) {
-                errorQuantity.text("");
-                submit.removeClass('pending');
-            } else {
-                money.val("");
-                errorQuantity.text("Please input valid quantity");
-                    submit.addClass('pending');
-            }   
+        let moneyVal = Math.round($(this).val() * updatedPrice * 100) / 100;
+        console.log(moneyVal)
+        if ($(this).val() && isFloat($(this).val()) && ((sellState && moneyVal <= totalValue) || (!sellState && moneyVal <= balance)) ) { 
+            money.val(moneyVal);
+            errorQuantity.text("");
+            submit.removeClass('pending');
+        
         } else {
             money.val("");
-            errorQuantity.text("Please input valid quantity");
+            errorQuantity.text("Invalid quantity");
             submit.addClass('pending');
         }
     });
@@ -314,21 +318,21 @@ $(document).ready(function() {
         timeSeriesChart("Time Series",formattedDateData);  
     })
     $('#month').on('click', function() {    
-        if (localStorage.getItem(keyName) && JSON.parse(localStorage.getItem(keyName)).date != today ) {
+        if (!localStorage.getItem(keyName) || today - JSON.parse(localStorage.getItem(keyName)).date > 1000*60*12) {
             requestDailyTimeSeries("Monthly Time Series",timeSeriesMonth);            
         } else {
             timeSeriesChart("Monthly Time Series",JSON.parse(localStorage.getItem(keyName)).month);
         }    
     })
     $('#year').on('click', function() {
-        if (localStorage.getItem(keyName) && JSON.parse(localStorage.getItem(keyName)).date != today) {
+        if (!localStorage.getItem(keyName) ||  today - JSON.parse(localStorage.getItem(keyName)).date > 1000*60*12) {
             requestDailyTimeSeries("Yearly Time Series",timeSeriesYear);            
         } else {
             timeSeriesChart("Yearly Time Series",JSON.parse(localStorage.getItem(keyName)).year);
         }   
     })
     $('#full').on('click', function() {
-        if (localStorage.getItem(keyName) && JSON.parse(localStorage.getItem(keyName)).date != today) {
+        if (!localStorage.getItem(keyName) ||  today - JSON.parse(localStorage.getItem(keyName)).date > 1000*60*12) {
             requestDailyTimeSeries("Time Series",timeSeriesFull);            
         } else {
             timeSeriesChart("Time Series",JSON.parse(localStorage.getItem(keyName)).full);
@@ -376,7 +380,7 @@ $(document).ready(function() {
                 timeSeriesYear.sort((a, b) => a[0] - b[0]);
                 timeSeriesFull.sort((a, b) => a[0] - b[0]); 
                 localStorage.setItem(keyName, JSON.stringify({month: timeSeriesMonth, year: timeSeriesYear, full: timeSeriesFull, date: today}))
-                console.log(localStorage.getItem(keyName));
+                
                 timeSeriesChart(title,dataBase);          
             },
             error: function () {
