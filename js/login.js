@@ -37,7 +37,7 @@ $(document).ready(function() {
     password.on("keyup", function() {
       let value = password.val().trim();
   
-      if (value.length > 8) {
+      if (value.length >= 8) {
         isEnoughLength = true;
       }
       isUpperCase = included(value, regExpUpper);
