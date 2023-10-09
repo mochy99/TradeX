@@ -23,6 +23,8 @@ $(document).ready(function() {
     const thousandBtn = $('#1000');
     const twoThousandBtn = $('#2000');
     const fiveThousandBtn = $('#5000');
+    const keyName = "Full" + symbol;
+    const today = new Date().getTime();
     
     // Handle event when clicking back btn
     $('#back').click(function() {
@@ -183,65 +185,36 @@ $(document).ready(function() {
         
     })
 
+    $('#day').on('click', function() {    
+        timeSeriesChart("Time Series",JSON.parse(localStorage.getItem(symbol)).source);  
+    })
     $('#month').on('click', function() {    
-        if (timeSeriesMonth) {
+        if (!localStorage.getItem(keyName) || today - JSON.parse(localStorage.getItem(keyName)).date > 1000*60*12) {
             requestDailyTimeSeries("Monthly Time Series",timeSeriesMonth);            
         } else {
-            timeSeriesChart("Monthly Time Series",timeSeriesMonth);
-        }
-        
-        console.log(timeSeriesMonth);        
+            timeSeriesChart("Monthly Time Series",JSON.parse(localStorage.getItem(keyName)).month);
+        }    
     })
     $('#year').on('click', function() {
-        if (timeSeriesYear) {
+        if (!localStorage.getItem(keyName) ||  today - JSON.parse(localStorage.getItem(keyName)).date > 1000*60*12) {
             requestDailyTimeSeries("Yearly Time Series",timeSeriesYear);            
         } else {
-            timeSeriesChart("Yearly Time Series",timeSeriesYear);
-        }
-        
+            timeSeriesChart("Yearly Time Series",JSON.parse(localStorage.getItem(keyName)).year);
+        }   
     })
     $('#full').on('click', function() {
-        if (timeSeriesFull) {
+        if (!localStorage.getItem(keyName) ||  today - JSON.parse(localStorage.getItem(keyName)).date > 1000*60*12) {
             requestDailyTimeSeries("Time Series",timeSeriesFull);            
         } else {
-            timeSeriesChart("Time Series",timeSeriesFull);
+            timeSeriesChart("Time Series",JSON.parse(localStorage.getItem(keyName)).full);
         }
     })
 
-    const url = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=" + symbol +"&interval=5min&apikey=Y8XIWI0EEDT64QKU";
-    //const url = '../data/intraday_test.json'; //for testing
-    $.ajax({
-        type: "GET",
-        url: url,
-        dataType: "json", 
-        success: function (data) {
-            timeSeriesIntaDay= data["Time Series (5min)"];
-            let lastTime = new Date().getDay();
-            for (const date in timeSeriesIntaDay) {
-                const entry = timeSeriesIntaDay[date];
-                const day = new Date(date).getDate();
-                if ((lastTime - day) < 1) {
-                    const timestamp = new Date(date).getTime();
-                    const open = parseFloat(entry["1. open"]);
-                    const high = parseFloat(entry["2. high"]);
-                    const low = parseFloat(entry["3. low"]);
-                    const close = parseFloat(entry["4. close"]);
-                    const volume = parseFloat(entry["5. volume"]);
-
-                    formattedDateData.push([timestamp, open, high, low, close, volume]);
-                }    
-            }
-            formattedDateData.sort((a, b) => a[0] - b[0]);
-            updatedPrice =formattedDateData[formattedDateData.length -1][2];
-            timeSeriesChart("Time Series",formattedDateData);
-            
-        },
-        error: function () {
-            $("#graph").text("We could not load the graph at this time. Check back soon.");
-        }
-    });
+    
     
     function requestDailyTimeSeries(title,dataBase) {
+        console.log(localStorage.getItem(keyName));
+        
         const link = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + symbol + "&outputsize=full&apikey=Y8XIWI0EEDT64QKU";
         $.ajax({
             type: "GET",
@@ -277,12 +250,55 @@ $(document).ready(function() {
                 timeSeriesMonth.sort((a, b) => a[0] - b[0]);
                 timeSeriesYear.sort((a, b) => a[0] - b[0]);
                 timeSeriesFull.sort((a, b) => a[0] - b[0]); 
+                localStorage.setItem(keyName, JSON.stringify({month: timeSeriesMonth, year: timeSeriesYear, full: timeSeriesFull, date: today}))
+                
                 timeSeriesChart(title,dataBase);          
             },
             error: function () {
                 $("#graph").text("We could not load the graph at this time. Check back soon.");
             }
         });
+      
     }
+    const oneHourInMilliseconds = 1000 * 60;
     
+    if (!localStorage.getItem(symbol) || today - JSON.parse(localStorage.getItem(symbol)).timestamp > oneHourInMilliseconds) {
+        const url = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=" + symbol +"&interval=5min&apikey=Y8XIWI0EEDT64QKU";
+        //const url = '../data/intraday_test.json'; //for testing
+        $.ajax({
+            type: "GET",
+            url: url,
+            dataType: "json", 
+            success: function (data) {
+                timeSeriesIntaDay= data["Time Series (5min)"];
+                let lastTime = new Date().getDay();
+                for (const date in timeSeriesIntaDay) {
+                    const entry = timeSeriesIntaDay[date];
+                    const day = new Date(date).getDate();
+                    if ((lastTime - day) < 1) {
+                        const timestamp = new Date(date).getTime();
+                        const open = parseFloat(entry["1. open"]);
+                        const high = parseFloat(entry["2. high"]);
+                        const low = parseFloat(entry["3. low"]);
+                        const close = parseFloat(entry["4. close"]);
+                        const volume = parseFloat(entry["5. volume"]);
+
+                        formattedDateData.push([timestamp, open, high, low, close, volume]);
+                    }    
+                }
+                formattedDateData.sort((a, b) => a[0] - b[0]);
+                localStorage.setItem(symbol, JSON.stringify({source: formattedDateData, date: today}))
+                updatedPrice =formattedDateData[formattedDateData.length -1][2];
+                timeSeriesChart("Time Series",formattedDateData);
+                
+            },
+            error: function () {
+                $("#graph").text("We could not load the graph at this time. Check back soon.");
+            }
+        });
+    } else {
+        let storedData = JSON.parse(localStorage.getItem(symbol)).source;
+        updatedPrice =storedData[storedData.length -1][2];
+        timeSeriesChart("Time Series",storedData);
+    }
 })
