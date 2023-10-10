@@ -3,13 +3,12 @@ $(document).ready(function() {
     let totalValue = 0;
     let totalCurrentValue = 0;
     let percentChange;
-    let timeSeriesIntaDay = [];
     let timeSeriesDaily = [];
     let timeSeriesFull = [];
     let timeSeriesMonth = [];
     let timeSeriesYear = [];
     let historyTransactions = [];
-    const formattedDateData = [];
+    let formattedDateData = [];
     let updatedPrice;
     let sellState = false;
     const symbol = $('#symbol').text();
@@ -41,18 +40,23 @@ $(document).ready(function() {
     // Fetch database for intraday
     function fetchDaily() {
         const oneHourInMilliseconds = 1000 * 60;
-    
-        if (!localStorage.getItem(symbol) || today - JSON.parse(localStorage.getItem(symbol)).timestamp > oneHourInMilliseconds) {
+        console.log(Boolean(!localStorage.getItem(symbol)));
+        console.log(Boolean(!localStorage.getItem(symbol)));
+        
+        if (!localStorage.getItem(symbol) || today - JSON.parse(localStorage.getItem(symbol)).date > oneHourInMilliseconds) {
             const url = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=" + symbol + "&interval=5min&apikey=Y8XIWI0EEDT64QKU";
-
+            console.log("first");
             $.ajax({
                 type: "GET",
                 url: url,
                 dataType: "json",
                 success: function (data) {
-                    const newData = { source: data, timestamp: today };
+                    formattedDateData = formatDaily(data);
+                    const newData = { source: formattedDateData, date: today };
                     localStorage.setItem(symbol, JSON.stringify(newData));
-                    formatDaily(data);
+                    console.log(localStorage.getItem(symbol));
+                    updatedPrice =formattedDateData[formattedDateData.length -1][2];
+                    timeSeriesChart("Time Series",formattedDateData);
                     history(userTransactions);
                     attachEventHandlers();
                     displayQuantity(totalQuantity);
@@ -63,7 +67,9 @@ $(document).ready(function() {
             });
         } else {
             const storedData = JSON.parse(localStorage.getItem(symbol)).source;
-            formatDaily(storedData);
+            console.log('local');
+            updatedPrice =storedData[storedData.length -1][2];
+            timeSeriesChart("Time Series",storedData);
             history(userTransactions);
             attachEventHandlers();
             displayQuantity(totalQuantity);
@@ -95,28 +101,7 @@ $(document).ready(function() {
         }
     }
 
-    // Format data Daily 
-    function formatDaily (data) {
-        timeSeriesIntaDay= data["Time Series (5min)"];
-        let lastTime = new Date().getDay();
-        for (const date in timeSeriesIntaDay) {
-            const entry = timeSeriesIntaDay[date];
-            const day = new Date(date).getDate();
-            if ((lastTime - day) < 1) {
-                const timestamp = new Date(date).getTime();
-                const open = parseFloat(entry["1. open"]);
-                const high = parseFloat(entry["2. high"]);
-                const low = parseFloat(entry["3. low"]);
-                const close = parseFloat(entry["4. close"]);
-                const volume = parseFloat(entry["5. volume"]);
-
-                formattedDateData.push([timestamp, open, high, low, close, volume]);
-            }    
-        }
-        formattedDateData.sort((a, b) => a[0] - b[0]);
-        updatedPrice =formattedDateData[formattedDateData.length -1][2];
-        timeSeriesChart("Time Series",formattedDateData);
-    }
+   
 
     // Display history transaction
     function history(data) {
@@ -160,7 +145,7 @@ $(document).ready(function() {
             }
         }
 
-        totalQuantity = totalQuantity;
+        totalQuantity = Math.round(totalQuantity * 100) / 100;;
         totalValue = Math.round(totalValue * 100) / 100;
         totalCurrentValue = Math.round(totalQuantity * updatedPrice * 100) / 100;
         percentChange =  Math.round((totalCurrentValue / totalValue - 1) * 100) / 100;
@@ -183,10 +168,6 @@ $(document).ready(function() {
     // Handle the amount money button.
     $('.select-money').on('click', function() {
         let value = parseFloat($(this).attr('value'));
-        console.log(value);
-        console.log(sellState);
-        console.log(totalValue);
-        console.log(balance)
         if ((sellState && value <= totalValue) || (!sellState && value <= balance)) {
             money.val(value);
             calQuantity();
@@ -319,9 +300,11 @@ $(document).ready(function() {
     })
     $('#month').on('click', function() {    
         if (!localStorage.getItem(keyName) || today - JSON.parse(localStorage.getItem(keyName)).date > 1000*60*12) {
-            requestDailyTimeSeries("Monthly Time Series",timeSeriesMonth);            
+            requestDailyTimeSeries("Monthly Time Series",timeSeriesMonth);  
+            console.log('first');          
         } else {
             timeSeriesChart("Monthly Time Series",JSON.parse(localStorage.getItem(keyName)).month);
+            console.log('local');
         }    
     })
     $('#year').on('click', function() {
