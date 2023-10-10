@@ -1,30 +1,22 @@
-let timeSeriesDay = [];
-let timeSeriesIntaDay = [];
-let timeSeriesDaily = [];
-let timeSeriesFull = [];
-let timeSeriesMonth = [];
-let timeSeriesYear = [];
-const formattedDateData = [];
-let updatedPrice;
-let sellState = false;
+
 $(document).ready(function() {
+    let timeSeriesDaily = [];
+    let timeSeriesFull = [];
+    let timeSeriesMonth = [];
+    let timeSeriesYear = [];
+    let formattedDateData = [];
+    let updatedPrice;
     const symbol = $('#symbol').text();
     const balance = parseFloat($('#currentBalance').text());
-    const limit = parseFloat($('#limit').text());
     const quantity = $('#quantity');
     const money = $('#money');
-    const errorMoney = $('.errorMoney');
+    const errorMoney = $('.error-money');
     const errorQuantity = $('.errorQuantity');
-    const price = parseFloat($("#price").text().replace("$",""));
     const submit = $('#submit');
     const cancel = $('#cancel');
-    const hundredBtn = $('#100');
-    const fiveHundredBtn = $('#500');
-    const thousandBtn = $('#1000');
-    const twoThousandBtn = $('#2000');
-    const fiveThousandBtn = $('#5000');
     const keyName = "Full" + symbol;
     const today = new Date().getTime();
+    const oneHourInMilliseconds = 1000 * 60;
     
     // Handle event when clicking back btn
     $('#back').click(function() {
@@ -39,41 +31,33 @@ $(document).ready(function() {
     // Change css class of box money
     $('#money').parent().removeClass('container');
     // Handle the amount money button.
-    hundredBtn.click(function(){
-        money.val(hundredBtn.val());
-        calQuantity();
-        errorMoney.text('');
-    })
-    fiveHundredBtn.click(function(){
-        money.val(fiveHundredBtn.val());
-        calQuantity();
-        errorMoney.text('');
-    })
-    thousandBtn.click(function(){
-        money.val(thousandBtn.val());
-        calQuantity();
-        errorMoney.text('');
-    })
-    twoThousandBtn.click(function(){
-        money.val(twoThousandBtn.val());
-        calQuantity();
-        errorMoney.text('');
-    })
-    fiveThousandBtn.click(function(){
-        money.val(fiveThousandBtn.val());
-        calQuantity();
-        errorMoney.text('');
+    $('.select-money').on('click', function() {
+        let value = parseFloat($(this).attr('value'));
+        if (value <= balance) {
+            money.val(value);
+            calQuantity();
+            
+            submit.removeClass('pending');
+            errorMoney.text("");
+            errorQuantity.text("");
+        } else {
+            money.val('');
+            quantity.val('');
+            errorMoney.text("Invalid amount of money");
+            submit.addClass('pending');
+            console.log('false')
+        } 
     })
     
 
-    // Handle blur in money input
-    money.on('keyup', function() {
+     // Handle blur in money input
+     money.on('keyup', function() {
         errorMoney.text("");
-        if (money.val() && isFloat(money.val()) &&  money.val() <= balance ) {
+        if (money.val() && isFloat(money.val()) &&   money.val() <= balance) {
             calQuantity();
         } else {
             quantity.val('');
-            errorMoney.text("Please input valid amount of money");
+            errorMoney.text("Invalid amount of money");
             submit.addClass('pending');
         }
     });
@@ -90,37 +74,16 @@ $(document).ready(function() {
     quantity.on('keyup', function() {
         console.log('hi');
         errorQuantity.text("");
-        let moneyVal = $(this).val() * updatedPrice;
-        console.log(moneyVal);
-        console.log(totalQuantity);
-        console.log(balance);
-        console.log(sellState);
-        if ($(this).val() && isFloat($(this).val()) ) { 
-            if (sellState) {
-                if ($(this).val() <= totalQuantity) {
-                    errorQuantity.text("");
-                    submit.removeClass('pending');
-                } else {
-                    money.val("");
-                    errorQuantity.text("Please input valid quantity");
-                     submit.addClass('pending');
-                }
-            } else {
-                if (moneyVal <= balance) {
-                    errorQuantity.text("");
-                    submit.removeClass('pending');
-                } else {
-                    money.val("");
-                    errorQuantity.text("Please input valid quantity");
-                     submit.addClass('pending');
-                }
-                money.val(moneyVal.toFixed(2) > 0 ? moneyVal.toFixed(2) : "");
-            }  
-            
-            
+        let moneyVal = Math.round($(this).val() * updatedPrice * 100) / 100;
+        console.log(moneyVal)
+        if ($(this).val() && isFloat($(this).val()) && moneyVal <= balance) { 
+            money.val(moneyVal);
+            errorQuantity.text("");
+            submit.removeClass('pending');
+        
         } else {
             money.val("");
-            errorQuantity.text("Please input valid quantity");
+            errorQuantity.text("Invalid quantity");
             submit.addClass('pending');
         }
     });
@@ -128,10 +91,9 @@ $(document).ready(function() {
     // Check validation of inputs
     submit.on('click', function() {
         if(!isNaN(money.val()) && !isNaN(quantity.val())
-        && ((!sellState && (money.val()) && (quantity.val()))
-        || (sellState && quantity.val()))) {    
-            let state = !sellState ? 'buy' : 'sell'; 
-            dataInf = [state, parseFloat(quantity.val()), updatedPrice, symbol, parseFloat(quantity.val() * updatedPrice)];
+        && (money.val() && quantity.val())) {    
+            let state =  'buy'; 
+            dataInf = [state, parseFloat(quantity.val()), updatedPrice, symbol, parseFloat(money.val())];
             console.log(dataInf);
             //Send and update data by ajax
             $.ajax({
@@ -140,9 +102,7 @@ $(document).ready(function() {
                 data: { inf: dataInf },
                 success: function (response) {   
                     inf = response.split(",");
-                    description = !sellState
-                                ? "You purchased successfully " + quantity.val() + " " + symbol
-                                : "You sold successfully " + quantity.val() + " " + symbol;
+                    description = "You purchased successfully " + quantity.val() + " " + symbol;
                     sellState = false;
                     $('#buy').addClass('hidden');
                     $('#notice').removeClass('hidden');
@@ -160,8 +120,12 @@ $(document).ready(function() {
                 }
             }); 
         } else {
-            checkBlank(money,errorMoney);
-            checkBlank(quantity, errorQuantity);
+            if (money.val() > balance) {
+                errorMoney.text("Exceed the balance!");
+            }  else {
+                checkBlank(money,errorMoney);
+                checkBlank(quantity, errorQuantity);
+            }
         }
         
     })
@@ -190,9 +154,11 @@ $(document).ready(function() {
     })
     $('#month').on('click', function() {    
         if (!localStorage.getItem(keyName) || today - JSON.parse(localStorage.getItem(keyName)).date > 1000*60*12) {
-            requestDailyTimeSeries("Monthly Time Series",timeSeriesMonth);            
+            requestDailyTimeSeries("Monthly Time Series",timeSeriesMonth); 
+            console.log('first');           
         } else {
             timeSeriesChart("Monthly Time Series",JSON.parse(localStorage.getItem(keyName)).month);
+            console.log('local');
         }    
     })
     $('#year').on('click', function() {
@@ -260,33 +226,17 @@ $(document).ready(function() {
         });
       
     }
-    const oneHourInMilliseconds = 1000 * 60;
     
-    if (!localStorage.getItem(symbol) || today - JSON.parse(localStorage.getItem(symbol)).timestamp > oneHourInMilliseconds) {
+    
+    if (!localStorage.getItem(symbol) || today - JSON.parse(localStorage.getItem(symbol)).date > oneHourInMilliseconds) {
         const url = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=" + symbol +"&interval=5min&apikey=Y8XIWI0EEDT64QKU";
-        //const url = '../data/intraday_test.json'; //for testing
+        console.log("first");
         $.ajax({
             type: "GET",
             url: url,
             dataType: "json", 
             success: function (data) {
-                timeSeriesIntaDay= data["Time Series (5min)"];
-                let lastTime = new Date().getDay();
-                for (const date in timeSeriesIntaDay) {
-                    const entry = timeSeriesIntaDay[date];
-                    const day = new Date(date).getDate();
-                    if ((lastTime - day) < 1) {
-                        const timestamp = new Date(date).getTime();
-                        const open = parseFloat(entry["1. open"]);
-                        const high = parseFloat(entry["2. high"]);
-                        const low = parseFloat(entry["3. low"]);
-                        const close = parseFloat(entry["4. close"]);
-                        const volume = parseFloat(entry["5. volume"]);
-
-                        formattedDateData.push([timestamp, open, high, low, close, volume]);
-                    }    
-                }
-                formattedDateData.sort((a, b) => a[0] - b[0]);
+                formattedDateData = formatDaily(data);
                 localStorage.setItem(symbol, JSON.stringify({source: formattedDateData, date: today}))
                 updatedPrice =formattedDateData[formattedDateData.length -1][2];
                 timeSeriesChart("Time Series",formattedDateData);
@@ -297,6 +247,8 @@ $(document).ready(function() {
             }
         });
     } else {
+        console.log('local');
+        console.log(JSON.parse(localStorage.getItem(symbol)));
         let storedData = JSON.parse(localStorage.getItem(symbol)).source;
         updatedPrice =storedData[storedData.length -1][2];
         timeSeriesChart("Time Series",storedData);
