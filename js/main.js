@@ -145,7 +145,7 @@ $(document).ready(function() {
         for (const stock in filteredData) {
             let value = Math.round(filteredData[stock][2] * 100) / 100;
             let quantity = Math.round(filteredData[stock][0] * 100 ) / 100;
-            if (value && stock !=="WD" && stock !=='DP' && quantity == 0) {
+            if (value && stock !=="WD" && stock !=='DP' && quantity != 0) {
                 value = value * -1;
                 quantity = quantity * -1;
                 asset += value;
