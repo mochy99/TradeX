@@ -116,7 +116,7 @@ $(document).ready(function() {
                 const value = transaction['value'] * -1;
 
                 totalQuantity += quantity;
-                totalValue += quantity * price;
+                totalValue += quantity * updatedPrice;
                 historyTransactions.push([id, date, quantity, price, value]);
                 let content;
                 let color;
@@ -210,7 +210,11 @@ $(document).ready(function() {
         console.log('hi');
         errorQuantity.text("");
         let moneyVal = Math.round($(this).val() * updatedPrice * 100) / 100;
-        console.log(moneyVal)
+        console.log(moneyVal);
+        console.log(sellState);
+        console.log(totalValue);
+        console.log(sellState);
+
         if ($(this).val() && isFloat($(this).val()) && ((sellState && moneyVal <= totalValue) || (!sellState && moneyVal <= balance)) ) { 
             money.val(moneyVal);
             errorQuantity.text("");

@@ -160,6 +160,7 @@ $(document).ready(function() {
                 
             }       
         }
+        asset = Math.round(asset * 100) /100;
         $('#portfolio').html(html);
     }
 
