@@ -179,3 +179,27 @@ function timeSeriesChart(title,data) {
     });
     
 }
+
+ // Format data Daily 
+ function formatDaily (data) {
+    timeSeriesIntaDay= data["Time Series (5min)"];
+    let lastTime = new Date().getDay();
+    let formattedDateData = [];
+    for (const date in timeSeriesIntaDay) {
+        const entry = timeSeriesIntaDay[date];
+        const day = new Date(date).getDate();
+        if ((lastTime - day) < 1) {
+            const timestamp = new Date(date).getTime();
+            const open = parseFloat(entry["1. open"]);
+            const high = parseFloat(entry["2. high"]);
+            const low = parseFloat(entry["3. low"]);
+            const close = parseFloat(entry["4. close"]);
+            const volume = parseFloat(entry["5. volume"]);
+
+            formattedDateData.push([timestamp, open, high, low, close, volume]);
+        }    
+    }
+    formattedDateData.sort((a, b) => a[0] - b[0]);
+    return formattedDateData;
+    
+}
