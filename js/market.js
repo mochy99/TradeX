@@ -2,11 +2,12 @@ let limit0 = 4;
 let limit1 = 4;
 let limit2 = 4;
 let data;
+const today = new Date().getTime();
 // Loading Top Gainers and Losers database
-loadingContent(); 
+
 
 $(document).ready(function () {
-    
+    loadingContent(); 
     // Handle events when clicking each of item
     $(document.body).on('click', '.item', function() {
         let symbol = $(this).attr('id');
@@ -128,53 +129,69 @@ $(document).ready(function () {
         $('#result').removeClass('visible').addClass('hidden');
     })
 
+        //-----------------------HELPER-------------------------
+    // Fetch information from database
+    function loadingContent() {
+        if (!localStorage.getItem("listing") || today - JSON.parse(localStorage.getItem("listing")).date > 1000*60*12) {
+            const link = "https://www.alphavantage.co/query?function=TOP_GAINERS_LOSERS&apikey=demo";
+            $.ajax({
+                type: "GET",
+                url: link, 
+                dataType: "json",
+                success: function (response) {
+                    data = response;
+                    localStorage.setItem("listing", JSON.stringify({source: data, date: today}));
+                    $('#0').html(loading(data.most_actively_traded, limit0));
+                    $('#1').html(loading(data.top_gainers, limit1));
+                    $('#2').html(loading(data.top_losers, limit2));
+                },
+                error: function () {
+                    console.log("Error fetching data from loadingListing.php");
+                }
+            });
+            console.log('first');
+        } else {
+            data = JSON.parse(localStorage.getItem("listing")).source;
+            console.log('local');
+            $('#0').html(loading(data.most_actively_traded, limit0));
+        $('#1').html(loading(data.top_gainers, limit1));
+        $('#2').html(loading(data.top_losers, limit2));
+            
+        }
+        
+        
+        
+    };
+
+    // Loading the dynamic data from API and dislaying it on the page
+    function loading(listing, limit) {
+        let html = '';
+        for (i = 0; i < limit; i++) {
+            let stock = listing[i];
+            let className = 'pos';
+            className = (stock['change_amount'] < 0) ? "neg" : className;
+            
+            // Concatenate the HTML string without semicolons at the end of each line
+            html += 
+                '<section action="catchItem.php" class="item" id ="' +stock['ticker'] +'">' +
+                '<div class="inf">' +
+                '<div>' + stock['ticker'] + '</div>' +
+                '<img src="../image/Logo-Tesla.jpg">' +
+                '</div>' +
+                '<div class="price">$' + stock['price'] + '</div>' +
+                '<div class="inf">' +
+                '<div id= "amount" class="' + className + '">' + stock['change_amount'] + '</div>' +
+                '<div id= "percentage" class="' + className + '">' + stock['change_percentage'] + '</div>' +
+                '</div>' +
+                '</section>';
+        
+        }
+        return html;
+    }
+
 })  
 
-//-----------------------HELPER-------------------------
-// Fetch information from database
-function loadingContent() {
-    const link = "https://www.alphavantage.co/query?function=TOP_GAINERS_LOSERS&apikey=demo";
-    $.ajax({
-        type: "GET",
-        url: link, 
-        dataType: "json",
-        success: function (response) {
-            data = response;
-            $('#0').html(loading(data.most_actively_traded, limit0));
-            $('#1').html(loading(data.top_gainers, limit1));
-            $('#2').html(loading(data.top_losers, limit2));
-        },
-        error: function () {
-            console.log("Error fetching data from loadingListing.php");
-        }
-    });
-};
 
-// Loading the dynamic data from API and dislaying it on the page
-function loading(listing, limit) {
-    let html = '';
-    for (i = 0; i < limit; i++) {
-        let stock = listing[i];
-        let className = 'pos';
-        className = (stock['change_amount'] < 0) ? "neg" : className;
-        
-        // Concatenate the HTML string without semicolons at the end of each line
-        html += 
-            '<section action="catchItem.php" class="item" id ="' +stock['ticker'] +'">' +
-            '<div class="inf">' +
-            '<div>' + stock['ticker'] + '</div>' +
-            '<img src="../image/Logo-Tesla.jpg">' +
-            '</div>' +
-            '<div class="price">$' + stock['price'] + '</div>' +
-            '<div class="inf">' +
-            '<div id= "amount" class="' + className + '">' + stock['change_amount'] + '</div>' +
-            '<div id= "percentage" class="' + className + '">' + stock['change_percentage'] + '</div>' +
-            '</div>' +
-            '</section>';
-    
-    }
-    return html;
-}
 
 // NOT DONE YET
 function bestMatch(data) {
